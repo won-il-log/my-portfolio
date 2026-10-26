@@ -275,14 +275,14 @@
             
             <!-- Danh sách Link chuyển hướng -->
             <div class="hidden lg:flex space-x-5 xl:space-x-8 font-medium text-sm">
-                <a href="#about" class="nav-link border-b-2 pb-1 transition-all text-slate-500 border-transparent">Giới thiệu</a>
+                <a href="#about" class="nav-link border-b-2 pb-1 transition-all text-brand-600 font-bold border-brand-600">Giới thiệu</a>
                 <a href="#skills" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Năng lực</a>
                 <a href="#projects" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Dự án</a>
                 <a href="#achievements" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Bằng cấp &amp; Giải thưởng</a>
                 <a href="#activities" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Kỹ năng mềm &amp; Ngoại khóa</a>
                 <a href="#contact" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Liên hệ</a>
                 <!-- EMAIL-TAM-THOI: xóa dòng này khi không cần -->
-                <a href="#email" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-brand-600 font-bold border-brand-600">Email</a>
+                <a href="#email" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Email</a>
             </div>
 
             <a href="assets/CV_NguyenMinhNhat_23TD111.pdf" target="_blank" class="hidden sm:flex items-center px-5 py-2.5 bg-brand-900 text-white rounded-full hover:bg-brand-600 transition-all text-sm font-semibold shadow-md hover:shadow-indigo-500/30">
@@ -2297,12 +2297,12 @@
             AOS.init({ once: true, offset: 60, duration: 700 });
         });
 
-        // ScrollSpy: Tự động sáng đèn Menu khi cuộn trang
-        window.addEventListener('scroll', () => {
-            let currentSection = '';
+        // ScrollSpy: Tự động sáng đèn Menu khi cuộn trang & ngay khi vừa mở trang
+        function updateActiveNav() {
+            let currentSection = 'about';
             document.querySelectorAll('.section-spy').forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= (sectionTop - 180)) { 
+                if (window.scrollY >= (sectionTop - 180)) { 
                     currentSection = section.getAttribute('id');
                 }
             });
@@ -2315,7 +2315,10 @@
                     link.classList.add('text-brand-600', 'font-bold', 'border-brand-600');
                 }
             });
-        });
+        }
+        window.addEventListener('scroll', updateActiveNav);
+        window.addEventListener('DOMContentLoaded', updateActiveNav);
+        window.addEventListener('load', updateActiveNav);
     </script>
 
 </body></html>
