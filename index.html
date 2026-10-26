@@ -223,7 +223,7 @@
     </div>
 
     <!-- THÔNG BÁO NHỎ (TOAST) -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[120] bg-slate-900 text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl max-w-[90vw] text-center border border-slate-700 hidden">Đã thêm 1 ảnh mới vào mục này &amp; lưu vào code!</div>
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[120] bg-slate-900 text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl max-w-[90vw] text-center border border-slate-700 hidden">Đã ghi toàn bộ chữ, ảnh &amp; giao diện mới thẳng vào file index.html!</div>
 
     <!-- NÚT NỔI: BẢNG ĐIỀU KHIỂN CHỈNH SỬA TOÀN DIỆN & TỰ LƯU VÀO CODE / ASSETS -->
     <div id="editor-floating-ui" class="fixed bottom-6 right-6 z-50 flex-col items-end space-y-2 hidden">
@@ -274,13 +274,15 @@
             </a>
             
             <!-- Danh sách Link chuyển hướng -->
-            <div class="hidden lg:flex space-x-8 font-medium text-sm">
-                <a href="#about" class="nav-link border-b-2 pb-1 transition-all text-brand-600 font-bold border-brand-600">Giới thiệu</a>
+            <div class="hidden lg:flex space-x-5 xl:space-x-8 font-medium text-sm">
+                <a href="#about" class="nav-link border-b-2 pb-1 transition-all text-slate-500 border-transparent">Giới thiệu</a>
                 <a href="#skills" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Năng lực</a>
                 <a href="#projects" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Dự án</a>
                 <a href="#achievements" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Bằng cấp &amp; Giải thưởng</a>
                 <a href="#activities" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Kỹ năng mềm &amp; Ngoại khóa</a>
                 <a href="#contact" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Liên hệ</a>
+                <!-- EMAIL-TAM-THOI: xóa dòng này khi không cần -->
+                <a href="#email" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-brand-600 font-bold border-brand-600">Email</a>
             </div>
 
             <a href="assets/CV_NguyenMinhNhat_23TD111.pdf" target="_blank" class="hidden sm:flex items-center px-5 py-2.5 bg-brand-900 text-white rounded-full hover:bg-brand-600 transition-all text-sm font-semibold shadow-md hover:shadow-indigo-500/30">
@@ -1217,6 +1219,80 @@
                 </a>
             </div>
         </section>
+
+        <!-- EMAIL-TAM-THOI-BAT-DAU: Muốn xóa mục Email thì xóa từ dòng này đến dòng "EMAIL-TAM-THOI-KET-THUC" (và dòng link Email trong menu) -->
+        <!-- ==================== 7: EMAIL GỬI DOANH NGHIỆP ==================== -->
+        <section id="email" class="px-6 py-24 scroll-mt-20 section-spy bg-slate-50 border-t border-slate-200/80">
+            <div class="max-w-6xl mx-auto">
+                <div class="mb-14 text-center max-w-3xl mx-auto" data-aos="fade-up">
+                    <span class="text-brand-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Thư Ngỏ Doanh Nghiệp</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-brand-900 tracking-tight mt-3">Email Gửi Doanh Nghiệp</h2>
+                    <p class="text-slate-500 mt-4 text-base sm:text-lg">Email giới thiệu bản thân và bày tỏ nguyện vọng thực tập gửi đến doanh nghiệp trong lĩnh vực tự động hoá.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-10 items-start">
+
+                    <!-- Nội dung email -->
+                    <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" data-aos="fade-right">
+                        <div class="flex items-center gap-2 px-5 py-3 bg-slate-100 border-b border-slate-200">
+                            <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                            <span class="ml-3 text-xs font-mono text-slate-500">Thư mới</span>
+                        </div>
+
+                        <div class="px-6 sm:px-8 pt-6 pb-2 text-sm space-y-2">
+                            <div class="flex gap-3 border-b border-slate-100 pb-2">
+                                <span class="w-16 shrink-0 text-slate-400 font-semibold">Từ:</span>
+                                <span class="text-slate-700">nnhat3884@gmail.com</span>
+                            </div>
+                            <div class="flex gap-3 border-b border-slate-100 pb-2">
+                                <span class="w-16 shrink-0 text-slate-400 font-semibold">Đến:</span>
+                                <span class="text-slate-700">chi.phan.401@misumi.com.vn</span>
+                            </div>
+                            <div class="flex gap-3 pb-2">
+                                <span class="w-16 shrink-0 text-slate-400 font-semibold">Tiêu đề:</span>
+                                <span class="text-slate-900 font-bold">&nbsp;[MISUMI] - Kỹ sư tự động hóa Hồ Chí Minh - Nguyễn Minh Nhật&nbsp;</span>
+                            </div>
+                        </div>
+
+                        <div class="px-6 sm:px-8 pb-8 pt-3 text-sm text-slate-700 leading-relaxed space-y-4">
+                            <p>Kính gửi Bộ phận Tuyển dụng – Công ty TNHH MISUMI Việt Nam,</p>
+                            <p>Em là Nguyễn Minh Nhật, sinh viên năm cuối ngành Công nghệ Kỹ thuật Tự động hóa tại Đại học Lạc Hồng. Là một thí sinh từng tham gia và vinh dự đạt Giải Khuyến khích tại cuộc thi MISUMI MAMD 2026, em đã có cơ hội trải nghiệm và vô cùng ấn tượng với các tiêu chuẩn linh kiện cũng như triết lý tự động hóa của MISUMI. Do đó, em rất mong có cơ hội được thực tập tại vị trí Kỹ sư Tự động hóa để học hỏi và đóng góp chuyên môn cho quý công ty.</p>
+                            <p>Trong quá trình học tập và làm việc, em đã chủ động xây dựng nền tảng thực tế qua các nội dung sau:</p>
+                            <ul class="list-disc pl-6 space-y-1.5">
+                                <li>Thiết kế cơ khí 3D, bóc tách bản vẽ bằng SOLIDWORKS, đạt chứng nhận quốc tế CSWA.</li>
+                                <li>Lập trình PLC Siemens (TIA Portal) và đồng bộ hóa mô phỏng dây chuyền 3D bằng Factory I/O.</li>
+                                <li>Ứng dụng Python, C/C++ và AI (OpenCV) vào việc nhận diện, giám sát và kiểm soát hệ thống IoT.</li>
+                                <li>Trưởng nhóm thiết kế "Máy Pick &amp; Place Tự động" - Giải Khuyến khích cuộc thi Thiết kế Máy tự động hóa MISUMI MAMD 2026.</li>
+                            </ul>
+                            <p>Em xin gửi kèm CV và đường dẫn portfolio để Anh/Chị tiện tham khảo. Em rất mong được trao đổi thêm với Anh/Chị vào thời gian thuận tiện.</p>
+                            <p>Em xin chân thành cảm ơn Anh/Chị đã dành thời gian đọc email này.</p>
+                            <div class="pt-2 border-t border-slate-100">
+                                <p class="font-bold text-brand-900">Trân trọng,</p>
+                                <p class="font-bold text-brand-900">Nguyễn Minh Nhật</p>
+                                <p class="text-slate-500">Sinh viên Công nghệ Kỹ thuật Tự động hoá – Đại học Lạc Hồng</p>
+                                <p class="text-slate-500">SĐT: 0941 770 959 | Email: nnhat3884@gmail.com</p>
+                                <p class="text-slate-500">LinkedIn: linkedin.com/in/nmn232205/</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ảnh chụp email (bật Chế Độ Chỉnh Sửa -> bấm vào khung để chèn ảnh) -->
+                    <div class="removable-item relative bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" data-aos="fade-left">
+                        <div class="editable-img-wrapper cursor-zoom-in relative bg-slate-200 border-b border-slate-200 min-h-[240px]" data-filename="email_screenshot.jpg" onclick="handleImageClick(this, 'Ảnh chụp email đã gửi đến doanh nghiệp')">
+                            <img src="assets/email_screenshot.jpg" alt="Ảnh chụp email gửi doanh nghiệp" class="w-full h-auto block" onerror="this.src='https://placehold.co/800x600/e2e8f0/475569?text=email_screenshot.jpg'">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-brand-900 text-lg mb-1">Ảnh chụp email đã gửi</h4>
+                            <p class="text-slate-500 text-sm">Bản chụp màn hình email thực tế gửi đến doanh nghiệp.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- EMAIL-TAM-THOI-KET-THUC -->
 
     </main>
 
