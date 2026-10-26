@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Minh Nhật | Kỹ sư Cơ điện tử &amp; Tự động hoá</title>
+    
+    <!-- Nhúng Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Nhúng Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Nhúng CSS của Swiper (Slider) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+
+    <!-- Nhúng CSS của AOS (Animate On Scroll - Hiệu ứng cuộn WOW) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Font chữ Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+    <!-- Cấu hình Tailwind -->
+     
+
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style id="custom-portfolio-style">
+        body { 
+            background-color: #f8fafc; 
+            color: #334155; 
+            overflow-x: hidden;
+        }
+        /* Nền lưới kỹ thuật kết hợp Gradient sáng */
+        .bg-grid-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hover-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
+        }
+        
+        /* Chỉnh CSS Swiper */
+        .swiper-button-next, .swiper-button-prev {
+            color: white !important;
+            background-color: rgba(15, 23, 42, 0.6);
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50%;
+            backdrop-filter: blur(6px);
+            transition: all 0.2s;
+            z-index: 40 !important;
+        }
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background-color: #6366f1 !important;
+            transform: scale(1.1);
+        }
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; font-weight: bold; }
+        .swiper-pagination { z-index: 40 !important; }
+        .swiper-pagination-bullet { background-color: white !important; opacity: 0.5; }
+        .swiper-pagination-bullet-active { opacity: 1 !important; background-color: #6366f1 !important; width: 20px !important; border-radius: 8px !important; transition: all 0.3s; }
+
+        /* Chế độ Chỉnh Sửa Toàn Diện */
+        body.edit-image-mode .editable-img-wrapper {
+            position: relative;
+            outline: 3px dashed #6366f1 !important;
+            outline-offset: -3px;
+            cursor: pointer !important;
+        }
+        body.edit-image-mode .editable-img-wrapper::after {
+            content: "📸 Bấm đổi ảnh (" attr(data-filename) ")";
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.68);
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            z-index: 25;
+            backdrop-filter: blur(2px);
+            transition: background 0.2s;
+            pointer-events: none;
+        }
+        body.edit-image-mode .editable-img-wrapper:hover::after {
+            background: rgba(79, 70, 229, 0.85);
+        }
+
+        /* Phần tử chỉ hiện khi bật Chế độ Chỉnh Sửa */
+        .edit-only { display: none !important; }
+        body.edit-image-mode .edit-only { display: flex !important; }
+
+        /* Mọi văn bản có thể sửa trực tiếp khi bật Edit Mode */
+        body.edit-image-mode [contenteditable="true"] {
+            outline: 1.5px dashed rgba(99, 102, 241, 0.55);
+            outline-offset: 3px;
+            border-radius: 4px;
+            cursor: text;
+            transition: all 0.15s;
+        }
+        body.edit-image-mode [contenteditable="true"]:hover,
+        body.edit-image-mode [contenteditable="true"]:focus {
+            outline: 2px dashed #4f46e5;
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        /* Khối mô tả chi tiết của từng hoạt động ngoại khóa */
+        .act-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #a5b4fc;
+            margin-bottom: 4px;
+        }
+        .act-text {
+            font-size: 0.8125rem;
+            line-height: 1.65;
+            color: #cbd5e1;
+        }
+        /* Chia mỗi hoạt động thành 1 hàng ngang: Cột trái chạy ảnh Slider, Cột phải hiện Tiêu đề + 4 ô Mô tả */
+        @media (min-width: 1024px) {
+            .act-list > div.act-item {
+                display: grid;
+                grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+                gap: 2.25rem;
+                align-items: start;
+            }
+            .act-list > div.act-item > .swiper,
+            .act-list > div.act-item > .act-media-col {
+                grid-column: 1;
+                grid-row: 1 / span 2;
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                overflow: hidden;
+                margin: 0 !important;
+            }
+            .act-list > div.act-item > .act-media-col .swiper {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+            }
+            .act-list > div.act-item > .act-header-col {
+                grid-column: 2;
+                grid-row: 1;
+                min-width: 0;
+                margin-bottom: 0 !important;
+            }
+            .act-list > div.act-item > .act-details-col {
+                grid-column: 2;
+                grid-row: 2;
+                min-width: 0;
+                margin-top: 0 !important;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 1rem;
+            }
+            .act-list > div.act-item > .act-details-col > div + div {
+                margin-top: 0 !important;
+            }
+            
+        }
+        /* Tự động căn đều 2 bên cho toàn bộ văn bản */
+        p, .act-text {
+            text-align: justify;
+            hyphens: auto; 
+        }
+        /* Ép những phần nằm trong khối text-center vẫn giữ nguyên căn giữa */
+        .text-center p {
+            text-align: center;
+        } 
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white flex flex-col min-h-screen relative">
+
+    <!-- INPUT FILE ẨN DÙNG CHO CÔNG CỤ ĐỔI ẢNH & NÚT (+ THÊM ẢNH) Ở CUỐI MỖI HÌNH -->
+    <input type="file" id="smart-file-input" accept="image/*,.gif" class="hidden">
+    <input type="file" id="multi-slide-input" accept="image/*,.gif" multiple="" class="hidden">
+
+    <!-- LIGHTBOX MODAL (PHÓNG TO ẢNH KHI CLICK) -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeLightbox()">
+        <div class="relative max-w-5xl w-full flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white hover:text-brand-500 text-3xl transition-colors">
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Phóng to" class="max-h-[82vh] w-auto object-contain rounded-2xl shadow-2xl border-2 border-white/20">
+            <p id="lightbox-caption" class="text-white font-medium mt-4 text-center text-lg"></p>
+        </div>
+    </div>
+
+    <!-- THÔNG BÁO NHỎ (TOAST) -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[120] bg-slate-900 text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl max-w-[90vw] text-center border border-slate-700 hidden">Đã thêm 1 ảnh mới vào mục này &amp; lưu vào code!</div>
+
+    <!-- NÚT NỔI: BẢNG ĐIỀU KHIỂN CHỈNH SỬA TOÀN DIỆN & TỰ LƯU VÀO CODE / ASSETS -->
+    <div id="editor-floating-ui" class="fixed bottom-6 right-6 z-50 flex-col items-end space-y-2 hidden">
+        <div id="edit-mode-Banner" class="bg-slate-900/95 backdrop-blur text-white text-xs p-4 rounded-2xl shadow-2xl border border-slate-700 w-80 mb-1 space-y-3 hidden">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                <p class="font-extrabold text-indigo-400 text-sm"><i class="fas fa-sliders-h mr-1.5"></i> Trình Chỉnh Sửa Toàn Diện</p>
+                <span id="folder-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Đã nối: my-portfolio</span>
+            </div>
+
+            <ul class="text-slate-300 space-y-1.5 leading-relaxed text-[11px]">
+                <li><i class="fas fa-plus-square text-emerald-400 w-4"></i> <strong>Thêm ảnh:</strong> Cuối mỗi ảnh đều có ô <strong>[+ Thêm ảnh]</strong> để chèn thêm hình vào khung trượt.</li>
+                <li><i class="fas fa-plus-circle text-cyan-400 w-4"></i> <strong>Thêm mục mới:</strong> Cuối mỗi phần đều có thẻ lớn <strong>[+ Thêm ...]</strong> trực tiếp trên giao diện.</li>
+                <li><i class="fas fa-pen text-indigo-400 w-4"></i> <strong>Sửa chữ:</strong> Bấm trực tiếp vào bất kỳ chữ nào để gõ lại.</li>
+            </ul>
+
+            <div class="space-y-2 pt-2 border-t border-slate-700">
+                <button type="button" onclick="connectProjectFolder()" class="w-full px-3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold flex items-center justify-center shadow-lg transition-all">
+                    <i class="fas fa-folder-open mr-2"></i> 1. Kết nối thư mục chứa Web (Auto-Save)
+                </button>
+                <button type="button" onclick="saveFullHtmlToCode(true)" class="w-full px-3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold flex items-center justify-center shadow-lg transition-all">
+                    <i class="fas fa-save mr-2"></i> 2. Lưu thẳng vào Code (index.html)
+                </button>
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <button type="button" onclick="downloadUpdatedHtmlFile()" class="px-2.5 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold text-[11px] border border-slate-600">
+                        <i class="fas fa-file-code mr-1"></i> Tải index.html
+                    </button>
+                    <button type="button" onclick="resetPortfolioData()" class="px-2.5 py-2 bg-slate-800 hover:bg-red-600 rounded-lg font-semibold text-[11px] border border-slate-600">
+                        <i class="fas fa-undo mr-1"></i> Khôi phục gốc
+                    </button>
+                </div>
+            </div>
+            <p class="text-slate-400 text-[10px] leading-relaxed">
+                Khi đã <strong>Kết nối thư mục</strong>, mọi ảnh bạn thêm sẽ tự động chép vào <code class="text-amber-300">assets/</code> và mọi giao diện mới tự động ghi thẳng vào <code class="text-amber-300">index.html</code>!
+            </p>
+        </div>
+        <button id="toggle-edit-btn" onclick="toggleImageEditMode()" class="px-5 py-3 border border-slate-200 rounded-full shadow-xl hover:shadow-2xl hover:border-brand-500 transition-all text-xs font-bold flex items-center space-x-2 bg-white text-slate-800">
+            <i class="fas fa-magic text-brand-600 text-base"></i>
+            <span id="toggle-edit-text">Bật Chế Độ Chỉnh Sửa</span>
+        </button>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 w-full z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#about" class="text-2xl font-extrabold text-brand-900 tracking-tight flex items-center">
+                <span class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center text-sm mr-2.5 shadow-md shadow-brand-500/30">MN</span>
+                Minh Nhật<span class="text-brand-500">.</span>
+            </a>
+            
+            <!-- Danh sách Link chuyển hướng -->
+            <div class="hidden lg:flex space-x-8 font-medium text-sm">
+                <a href="#about" class="nav-link border-b-2 pb-1 transition-all text-brand-600 font-bold border-brand-600">Giới thiệu</a>
+                <a href="#skills" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Năng lực</a>
+                <a href="#projects" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Dự án</a>
+                <a href="#achievements" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Bằng cấp &amp; Giải thưởng</a>
+                <a href="#activities" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Kỹ năng mềm &amp; Ngoại khóa</a>
+                <a href="#contact" class="nav-link hover:text-brand-600 border-b-2 pb-1 transition-all text-slate-500 border-transparent">Liên hệ</a>
+            </div>
+
+            <a href="assets/CV_NguyenMinhNhat_23TD111.pdf" target="_blank" class="hidden sm:flex items-center px-5 py-2.5 bg-brand-900 text-white rounded-full hover:bg-brand-600 transition-all text-sm font-semibold shadow-md hover:shadow-indigo-500/30">
+                <i class="fas fa-file-download mr-2"></i> Tải CV (PDF)
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="portfolio-main" class="flex-grow">
+
+        <!-- ==================== 1: ABOUT ME (HERO SECTION) ==================== -->
+        <section id="about" class="bg-grid-pattern min-h-screen flex items-center px-6 pt-28 pb-16 scroll-mt-20 section-spy relative overflow-hidden">
+            <div class="absolute top-20 left-10 w-96 h-96 bg-indigo-300/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-cyan-300/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center w-full relative z-10">
+                <!-- Cột chữ (7 phần) -->
+                <div class="lg:col-span-7 space-y-6" data-aos="fade-right" data-aos-duration="800">
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-indigo-100 text-brand-600 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-2.5 animate-ping"></span>
+                        <span>Sẵn sàng cho cơ hội Thực tập &amp; Kỹ sư Cơ Điện Tử / Tự Động Hoá</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl lg:text-[4.25rem] font-extrabold text-brand-900 tracking-tight leading-[1.12]"><span class="text-gradient">&nbsp;Manual stops.</span><div><span class="text-gradient">&nbsp;Automation starts.</span></div></h1>
+
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">Xin chào! Tôi là <b data-path-to-node="4,0" data-index-in-node="18">Nguyễn Minh Nhật</b> — sinh viên ngành Công nghệ Kỹ thuật Tự động hoá tại Đại học Lạc Hồng. Với định hướng trở thành một kỹ sư thực chiến, tôi không ngừng trau dồi bộ kỹ năng của mình qua các dự án thực tế, từ <b data-path-to-node="4,0" data-index-in-node="224">Thiết kế cơ khí 3D (SOLIDWORKS CSWA)</b>, <b data-path-to-node="4,0" data-index-in-node="262">Mô phỏng dây chuyền (PLC/Factory I/O)</b> cho đến việc bước đầu ứng dụng <b data-path-to-node="4,0" data-index-in-node="331">Python &amp; AI</b> vào kiểm soát hệ thống.</p>
+                    
+                    <!-- Khối Chỉ số Nổi bật (Quick Stats) -->
+                    <div class="grid grid-cols-3 gap-4 pt-2 max-w-lg">
+                        <div class="bg-white/90 backdrop-blur p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-brand-600">06</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">Dự án Kỹ thuật</div>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-brand-600">03</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">Giải thưởng &amp; Đấu trường</div>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-brand-600">06</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">Chứng chỉ Quốc tế &amp; Kỹ năng</div>
+                        </div>
+                    </div>
+
+                    <!-- Khối Mục tiêu & Triết lý chuẩn Doanh nghiệp -->
+                    <div class="grid sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-5 bg-white border border-slate-200/80 rounded-2xl shadow-sm hover-card">
+                            <h3 class="text-brand-900 font-bold mb-2 flex items-center text-sm uppercase tracking-wider">
+                                <i class="fas fa-bullseye text-brand-500 mr-2 text-lg"></i> <span>Định Hướng Nghề Nghiệp</span>
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3"><b>Ngắn hạn:</b> Bắt nhịp nhanh với môi trường thực tế. Vận dụng kiến thức CAD và nền tảng lập trình (PLC/Python) để hỗ trợ nhóm thiết kế, cải tiến các cụm máy móc tại xưởng.</p>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed"><b>Dài hạn:</b> Tích lũy đủ kinh nghiệm thực chiến để trở thành một Kỹ sư Tích hợp Hệ thống (System Integrator) vững tay nghề, có khả năng đảm nhận trọn vẹn một dự án tự động hóa.</p>
+                        </div>
+                        <div class="p-5 bg-white border border-slate-200/80 rounded-2xl shadow-sm hover-card">
+                            <h3 class="text-brand-900 font-bold mb-2 flex items-center text-sm uppercase tracking-wider">
+                                <i class="fas fa-cogs text-brand-500 mr-2 text-lg"></i> <span>Triết Lý Kỹ Thuật</span>
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">"Sự hoàn hảo của kỹ thuật không nằm ở những hệ thống phức tạp, mà ở tính thực dụng: Dễ chế tạo, chi phí tối ưu, và giải quyết triệt để bài toán ổn định trên dây chuyền sản xuất."</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4">
+                        <a href="#projects" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-full hover:bg-brand-700 transition-all shadow-xl shadow-brand-500/25 flex items-center">
+                            <span>Khám phá Dự án</span> <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                        <a href="#achievements" class="px-7 py-4 bg-white border border-slate-200 text-slate-700 font-semibold rounded-full hover:border-brand-500 hover:text-brand-600 transition-all flex items-center shadow-sm">
+                            <i class="fas fa-award text-brand-500 mr-2"></i> <span>Hồ sơ Năng lực</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Cột Avatar (5 phần) -->
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="800">
+                    <div class="relative w-full max-w-[390px]">
+                        <div class="absolute -inset-3 bg-gradient-to-tr from-brand-500 to-cyan-400 rounded-[2.5rem] blur-2xl opacity-25"></div>
+                        <div class="editable-img-wrapper relative z-10 rounded-[2rem] overflow-hidden shadow-2xl border-8 border-white bg-slate-200 aspect-[4/5]" data-filename="avatar.jpg">
+                            <img src="assets/avatar.jpg" alt="Nguyễn Minh Nhật" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x750/e2e8f0/475569?text=Avatar+Minh+Nhat'">
+                        </div>
+                        <!-- Floating Badge 1 -->
+                        <div class="absolute -bottom-5 -left-5 z-20 bg-white px-4 py-3 rounded-2xl shadow-xl border border-slate-100 flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-lg font-bold"><i class="fas fa-cube"></i></div>
+                            <div>
+                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Chứng nhận Quốc tế</p>
+                                <p class="text-xs font-extrabold text-slate-800">SOLIDWORKS CSWA</p>
+                            </div>
+                        </div>
+                        <!-- Floating Badge 2 -->
+                        <div class="absolute -top-5 -right-4 z-20 bg-white px-4 py-3 rounded-2xl shadow-xl border border-slate-100 flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-brand-600 flex items-center justify-center text-lg font-bold"><i class="fas fa-brain"></i></div>
+                            <div>
+                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Chuyên môn</p>
+                                <p class="text-xs font-extrabold text-slate-800">CAD 3D &amp; AI</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 2: SKILLS (NĂNG LỰC CỐT LÕI) ==================== -->
+        <section id="skills" class="px-6 py-24 bg-white border-t border-slate-200/80 scroll-mt-20 section-spy">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-16 text-center max-w-3xl mx-auto" data-aos="fade-up">
+                    <span class="text-brand-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Năng Lực Kỹ Thuật</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-brand-900 tracking-tight mt-3">Kỹ Năng Chuyên Môn</h2>
+                    <p class="text-slate-500 mt-4 text-base sm:text-lg">Được phân bổ rõ ràng theo các trụ cột cốt lõi để đáp ứng yêu cầu công việc thực tế tại doanh nghiệp.</p>
+                </div>
+
+                <div id="skills-grid" class="grid md:grid-cols-3 gap-8">
+                    <!-- Trụ cột 1 -->
+                    <div class="removable-item relative p-8 bg-slate-50/70 rounded-3xl border border-slate-200/80 hover-card group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-14 h-14 bg-white text-brand-600 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fas fa-drafting-compass"></i></div>
+                        <h3 class="text-2xl font-bold text-brand-900 mb-3">Thiết Kế Cơ Khí &amp; CAD 3D</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                            Năng lực dựng hình 3D chi tiết máy, thiết kế đồ gá (Jig), cụm cấp phôi tự động và kiểm tra va chạm động học. Xuất bản vẽ kỹ thuật 2D/3D và bản vẽ lắp (Exploded View) phục vụ gia công.
+                        </p>
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 mb-6" data-filename="skill_cad.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Thiết Kế Cơ Khí &amp; CAD 3D')">
+                            <img src="assets/skill_cad.jpg" alt="Minh chứng Thiết kế Cơ khí &amp; CAD 3D" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=skill_cad.jpg'">
+                        </div>
+                        <div class="pt-4 border-t border-slate-200/80 leading-relaxed font-mono text-xs sm:text-sm">
+                            <span class="text-brand-600 font-semibold">SOLIDWORKS (CSWA)</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">AutoCAD 2D</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Motion Study</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Thiết kế cơ khí cơ bản</span>
+                        </div>
+                    </div>
+
+                    <!-- Trụ cột 2 -->
+                    <div class="removable-item relative p-8 bg-slate-50/70 rounded-3xl border border-slate-200/80 hover-card group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-14 h-14 bg-white text-brand-600 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fas fa-laptop-code"></i></div>
+                        <h3 class="text-2xl font-bold text-brand-900 mb-3">Lập Trình Phần Mềm &amp; AI</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                            Xây dựng mô hình Trí tuệ nhân tạo (AI / Machine Learning), phát triển thuật toán phân tích dữ liệu, tích hợp mô hình AI Chatbot và giao diện điều khiển trực quan trên nền tảng Web/Desktop.
+                        </p>
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 mb-6" data-filename="skill_ai.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Lập Trình Phần Mềm &amp; AI')">
+                            <img src="assets/skill_ai.jpg" alt="Minh chứng Lập trình Phần mềm &amp; AI" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=skill_ai.jpg'">
+                        </div>
+                        <div class="pt-4 border-t border-slate-200/80 leading-relaxed font-mono text-xs sm:text-sm">
+                            <span class="text-brand-600 font-semibold">Python</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">OpenCV</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">C++</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Lập trình AI cơ bản</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Streamlit / Web UI</span>
+                        </div>
+                    </div>
+
+                    <!-- Trụ cột 3 -->
+                    <div class="removable-item relative p-8 bg-slate-50/70 rounded-3xl border border-slate-200/80 hover-card group" data-aos="fade-up" data-aos-delay="300">
+                        <div class="w-14 h-14 bg-white text-brand-600 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fas fa-robot"></i></div>
+                        <h3 class="text-2xl font-bold text-brand-900 mb-3">Mô Phỏng &amp; Tự Động Hoá</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                            Thiết lập chu trình điều khiển PLC, tinh chỉnh bộ điều khiển PID cho hệ thống bồn nước, tính toán quỹ đạo cánh tay Robot công nghiệp và đồng bộ tín hiệu qua môi trường mô phỏng 3D.
+                        </p>
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 mb-6" data-filename="skill_auto.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Mô Phỏng &amp; Tự Động Hoá')">
+                            <img src="assets/skill_auto.jpg" alt="Minh chứng Mô phỏng &amp; Tự động hoá" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=skill_auto.jpg'">
+                        </div>
+                        <div class="pt-4 border-t border-slate-200/80 leading-relaxed font-mono text-xs sm:text-sm">
+                            <span class="text-brand-600 font-semibold">PLC (TIA Portal / PID)</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Factory I/O</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">UR Simulator</span><span class="text-slate-400 mx-1">,</span>
+                            <span class="text-brand-600 font-semibold">Khí nén</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 3: PROJECTS (DỰ ÁN CHI TIẾT CHUẨN DOANH NGHIỆP) ==================== -->
+        <section id="projects" class="px-6 py-24 bg-slate-50 border-t border-slate-200/80 scroll-mt-20 section-spy">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-12 text-center max-w-3xl mx-auto" data-aos="fade-up">
+                    <span class="text-brand-600 font-bold text-xs uppercase tracking-widest bg-indigo-100/80 px-3 py-1 rounded-full">Hồ Sơ Dự Án Thực Chiến</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-brand-900 tracking-tight mt-3">5 Dự Án Kỹ Thuật Tiêu Biểu</h2>
+                    <p class="text-slate-500 mt-4 text-base sm:text-lg">Mỗi dự án đều được trình bày rõ ràng theo tiêu chuẩn doanh nghiệp: <strong>Bài toán</strong> → <strong>Giải pháp &amp; Vai trò</strong> → <strong>Kết quả đạt được</strong>. (Bấm vào ảnh để phóng to)</p>
+                </div>
+
+                <!-- Bộ lọc Dự án (Filter Buttons) -->
+                <div class="flex flex-wrap justify-center gap-3 mb-14" data-aos="fade-up" data-aos-delay="100">
+                    <button onclick="filterProjects('all')" class="proj-filter-btn active px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-brand-600 text-white shadow-md transition-all" data-filter="all">Tất cả dự án</button>
+                    <button onclick="filterProjects('cad')" class="proj-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:border-brand-500 transition-all" data-filter="cad">Thiết kế CAD &amp; Cơ khí</button>
+                    <button onclick="filterProjects('ai')" class="proj-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:border-brand-500 transition-all" data-filter="ai">Lập trình &amp; AI</button>
+                    <button onclick="filterProjects('auto')" class="proj-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:border-brand-500 transition-all" data-filter="auto">Mô phỏng &amp; Điều khiển</button>
+                </div>
+
+                <div class="space-y-12" id="projects-container">
+                    
+                    <!-- DỰ ÁN 1: MAMD 2026 -->
+                    <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-slate-200/80 shadow-sm hover-card" data-category="cad auto" data-aos="fade-up">
+                        <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-900 editable-img-wrapper cursor-zoom-in" data-filename="mamd_overview.gif" onclick="handleImageClick(this, 'Hệ thống Máy Pick &amp; Place Tự Động - MISUMI MAMD 2026')">
+                            <img src="assets/mamd_overview.gif" alt="Máy MAMD 2026" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=GIF+May+MAMD+2026'">
+                            <span class="absolute top-4 left-4 bg-amber-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">🏆 Giải Khuyến Khích KV Miền Nam</span>
+                        </div>
+                        <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Cuộc thi Thiết kế Máy MISUMI MAMD 2026</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-xs font-semibold text-slate-500">Trưởng nhóm LH_AUTX</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Hệ Thống Máy Tự Động Pick &amp; Place</h3>
+                            
+                            <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Thiết kế trạm gắp - đặt linh kiện tốc độ cao kết hợp cơ cấu cấp khay (tray) liên tục, tối ưu không gian lắp đặt và giảm thời gian dừng máy.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Dẫn dắt đội 6 thành viên; trực tiếp dựng mô hình 3D trên SOLIDWORKS, lựa chọn linh kiện tiêu chuẩn MISUMI, thiết kế cụm giác hút chân không khí nén và tính toán hành trình.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Hoàn thiện bộ hồ sơ kỹ thuật, bản vẽ lắp 3D và video mô phỏng nguyên lý; xuất sắc đạt <strong>Giải Khuyến Khích Toàn Miền Nam</strong>.</p>
+                            </div>
+
+                            <div class="leading-relaxed font-mono text-xs">
+                                <span class="text-brand-600 font-semibold">SOLIDWORKS 3D</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Linh kiện MISUMI</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Khí nén &amp; Chân không</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Quản lý nhóm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DỰ ÁN 2: HỆ THỐNG AI KIỂM TRA ĐÁNH GIÁ CHẤT LƯỢNG RƯỢU VANG -->
+                    <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row-reverse border border-slate-200/80 shadow-sm hover-card" data-category="ai" data-aos="fade-up">
+                        <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-900 editable-img-wrapper cursor-zoom-in" data-filename="wine_ai.gif" onclick="handleImageClick(this, 'Hệ Thống AI Kiểm Tra &amp; Đánh Giá Chất Lượng Rượu Vang')">
+                            <img src="assets/wine_ai.gif" alt="Hệ thống AI đánh giá chất lượng rượu vang" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=wine_ai.gif+(AI+Chat+Luong+Ruou+Vang)'">
+                            <span class="absolute top-4 right-4 bg-brand-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">Python &amp; Machine Learning AI</span>
+                        </div>
+                        <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Trí Tuệ Nhân Tạo &amp; Kiểm Định Chất Lượng</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-xs font-semibold text-slate-500">Nhà phát triển chính</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Hệ Thống AI Kiểm Tra &amp; Đánh Giá Chất Lượng Rượu Vang</h3>
+                            
+                            <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Đánh giá và phân loại chất lượng rượu vang khách quan dựa trên các chỉ số hóa lý (độ chua, độ pH, lượng đường dư, nồng độ cồn, sulfates...), khắc phục sự phụ thuộc vào cảm tính khi thử nếm thủ công.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Xây dựng quy trình tiền xử lý dữ liệu, chuẩn hóa đặc trưng và huấn luyện mô hình Học máy / Trí tuệ nhân tạo bằng <strong>Python (Scikit-learn, Pandas, NumPy)</strong>, tích hợp giao diện trực quan để nhập thông số và dự đoán điểm chất lượng theo thời gian thực.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Phân loại chính xác chất lượng rượu vang từ bộ thông số đầu vào, hỗ trợ tự động hóa khâu kiểm soát chất lượng (QC) trong sản xuất.</p>
+                            </div>
+
+                            <div class="leading-relaxed font-mono text-xs">
+                                <span class="text-brand-600 font-semibold">Python</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Machine Learning / AI</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Scikit-learn &amp; Pandas</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Kiểm định chất lượng (QC)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DỰ ÁN 3: BỒN NƯỚC PID FACTORY I/O -->
+                    <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-slate-200/80 shadow-sm hover-card" data-category="auto" data-aos="fade-up">
+                        <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-900 editable-img-wrapper cursor-zoom-in" data-filename="pid_factoryio.gif" onclick="handleImageClick(this, 'Mô phỏng Điều khiển Bồn Nước PID qua Factory I/O')">
+                            <img src="assets/pid_factoryio.gif" alt="Mô phỏng PID Bồn Nước" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=GIF+PID+Factory+IO'">
+                            <span class="absolute top-4 left-4 bg-cyan-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">PLC &amp; PID Control</span>
+                        </div>
+                        <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Hệ Thống Điều Khiển Quá Trình</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-xs font-semibold text-slate-500">Thiết kế thuật toán &amp; Mô phỏng</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Điều Khiển Mức Nước Bồn Đơn Dùng Thuật Toán PID (Factory I/O)</h3>
+                            
+                            <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Duy trì mức chất lỏng trong bồn chứa công nghiệp bám sát giá trị đặt (Setpoint) bất chấp lưu lượng xả tải thay đổi liên tục.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Lập trình khối hàm điều khiển liên tục PID trên Matlab, đọc tín hiệu cảm biến mức dạng Analog để điều khiển độ mở van cấp và đồng bộ hóa 3D trực tiếp với phần mềm <strong>Factory I/O</strong>.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Hệ thống đáp ứng nhanh, độ vọt lố (Overshoot) thấp và triệt tiêu sai số xác lập khi có nhiễu xả tải.</p>
+                            </div>
+
+                            <div class="leading-relaxed font-mono text-xs">
+                                <span class="text-brand-600 font-semibold">Factory I/O</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Matlab</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Thuật toán PID</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Xử lý tín hiệu Analog</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DỰ ÁN 4: TRẠM ROBOT CHÀ NHÁM UR SIMULATOR -->
+                    <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row-reverse border border-gray-200/80 shadow-sm hover-card" data-category="auto cad" data-aos="fade-up">
+                        <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-900 editable-img-wrapper cursor-zoom-in" data-filename="robot_sanding.gif" onclick="handleImageClick(this, 'Mô phỏng Trạm Robot Chà Nhám &amp; Hút Thớt Gỗ')">
+                            <img src="assets/robot_sanding.gif" alt="Robot chà nhám" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=GIF+Robot+Cha+Nham'">
+                            <span class="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">Industrial Robotics</span>
+                        </div>
+                        <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Đồ Án Robot Công Nghiệp</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-xs font-semibold text-slate-500">Lập trình quỹ đạo &amp; Mô phỏng</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Trạm Robot Tự Động Chà Nhám &amp; Hút Thớt Gỗ</h3>
+                            
+                            <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Tự động hóa khâu gắp phôi thớt gỗ, đưa vào cụm đánh bóng/chà nhám bề mặt và xếp kho nhằm thay thế lao động thủ công trong môi trường nhiều bụi gỗ.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Thiết lập không gian làm việc, tính toán các điểm Waypoints tránh va chạm trên <strong>UR Simulator</strong> và phối hợp cơ cấu chấp hành cuối (End-effector) dùng giác hút chân không.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Chu trình vận hành khép kín, quỹ đạo di chuyển mượt và đảm bảo an toàn vùng làm việc.</p>
+                            </div>
+
+                            <div class="leading-relaxed font-mono text-xs">
+                                <span class="text-brand-600 font-semibold">UR Simulator</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Quỹ đạo Robot</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Vacuum Gripper</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Tối ưu Cycle Time</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DỰ ÁN 5: GREENMATEBOX EPIC & ĐẤU TRƯỜNG QUỐC TẾ -->
+                    <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-slate-200/80 shadow-sm hover-card" data-category="cad ai" data-aos="fade-up">
+                        <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-100 flex items-center justify-center p-6 editable-img-wrapper cursor-zoom-in" data-filename="greenmatebox.jpg" onclick="handleImageClick(this, 'Thiết kế Hệ thống GreenMateBox - Cuộc thi EPIC')">
+                            <img src="assets/greenmatebox.jpg" alt="Dự án GreenMateBox" class="max-w-full max-h-full object-contain rounded-xl shadow-md" onerror="this.src='https://placehold.co/800x600/e2e8f0/475569?text=Anh+Mo+Hinh+GreenMateBox'">
+                            <span class="absolute top-4 left-4 bg-pink-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">Đổi Mới Sáng Tạo EPIC</span>
+                        </div>
+                        <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Cuộc Thi Khởi Nghiệp EPIC &amp; Sáng Tạo Quốc Tế</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-xs font-semibold text-slate-500">Thiết kế Sản phẩm &amp; Giải pháp</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Mô Hình GreenMateBox &amp; Giải Pháp AI/IoT Ứng Dụng</h3>
+                            
+                            <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Phát triển các ý tưởng sản phẩm thông minh hướng tới bảo vệ môi trường, nông nghiệp bền vững và hỗ trợ sức khỏe tinh thần cho sinh viên.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Phác thảo kiểu dáng cơ khí 3D cho <strong>GreenMateBox</strong> (dừng chân tại vòng cấp trường cuộc thi EPIC); đồng thời phát triển đề tài <em>Mental Health AI Chatbot</em> và <em>IoT Agricultural Sensors</em> tham dự cuộc thi Sáng tạo Quốc tế tại Trung Quốc.</p>
+                                <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Rèn luyện tư duy thiết kế sản phẩm thực tế (Product Thinking), kỹ năng thuyết trình dự án bằng tiếng Anh và làm việc liên ngành.</p>
+                            </div>
+
+                            <div class="leading-relaxed font-mono text-xs">
+                                <span class="text-brand-600 font-semibold">SOLIDWORKS Concept</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">AI Chatbot</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Tư duy thiết kế</span><span class="text-slate-300 mx-1">,</span>
+                                <span class="text-brand-600 font-semibold">Thuyết trình</span>
+                            </div>
+                        </div>
+                    </div>
+                        <!-- DỰ ÁN 6: WEB QUẢN LÝ BÁN HÀNG ĐẠI LÝ TẠP HÓA -->
+                        <div class="project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row-reverse border border-slate-200/80 shadow-sm hover-card" data-category="ai" data-aos="fade-up">
+                            <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-100 flex items-center justify-center p-6 editable-img-wrapper cursor-zoom-in" data-filename="tap_hoa_pos.jpg" onclick="handleImageClick(this, 'Web quản lý bán hàng cho Đại lý phân phối tạp hóa')">
+                                <img src="assets/tap_hoa_pos.jpg" alt="Web quản lý đại lý tạp hóa" class="max-w-full max-h-full object-contain rounded-xl shadow-md" onerror="this.src='https://placehold.co/800x600/e2e8f0/475569?text=tap_hoa_pos.jpg'">
+                                <span class="absolute top-4 right-4 bg-orange-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">Web App Thực Tế</span>
+                            </div>
+                            <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Lập Trình Web &amp; Chuyển Đổi Số</span>
+                                    <span class="text-slate-300">•</span>
+                                    <span class="text-xs font-semibold text-slate-500">Thiết kế &amp; Lập trình toàn bộ</span>
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Web Quản Lý Bán Hàng Cho Đại Lý Phân Phối Tạp Hóa Sỉ &amp; Lẻ</h3>
+
+                                <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                    <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Đại lý tạp hóa vừa bán sỉ vừa bán lẻ, đơn hàng đến từ nhiều nguồn (tại quầy, giao hàng, Zalo) nên việc ghi chép đơn, công nợ khách và sổ quỹ thủ công dễ sai sót, khó tổng hợp doanh thu và lãi cuối ngày.</p>
+                                    <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò &amp; Giải pháp:</strong> Tự thiết kế và lập trình web app ưu tiên giao diện điện thoại bằng <strong>JavaScript</strong>, lưu dữ liệu trên <strong>Firebase Firestore</strong>. Hệ thống gồm các module: bán tại quầy, bán giao hàng, nhập đơn Zalo, nhập hàng, sổ nợ khách hàng, sổ quỹ và báo cáo doanh thu / lãi gộp theo kỳ. Triển khai trên GitHub Pages.</p>
+                                    <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Dashboard hiển thị doanh thu, số đơn hoàn thành, đơn đang giao và lãi gộp trong ngày; cho phép sửa/xoá dòng hàng trong báo cáo, giúp chủ đại lý theo dõi kinh doanh ngay trên điện thoại.</p>
+                                </div>
+
+                                <div class="leading-relaxed font-mono text-xs mb-5">
+                                    <span class="text-brand-600 font-semibold">JavaScript</span><span class="text-slate-300 mx-1">,</span>
+                                    <span class="text-brand-600 font-semibold">Firebase Firestore</span><span class="text-slate-300 mx-1">,</span>
+                                    <span class="text-brand-600 font-semibold">Mobile-first UI</span><span class="text-slate-300 mx-1">,</span>
+                                    <span class="text-brand-600 font-semibold">GitHub Pages</span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 4: ACHIEVEMENTS & CERTIFICATES ==================== -->
+        <section id="achievements" class="px-6 py-24 bg-white border-t border-slate-200/80 scroll-mt-20 section-spy">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-16 text-center max-w-3xl mx-auto" data-aos="fade-up">
+                    <span class="text-brand-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Bảo Chứng Năng Lực</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-brand-900 tracking-tight mt-3">Giải Thưởng &amp; Văn Bằng</h2>
+                    <p class="text-slate-500 mt-4 text-base sm:text-lg">Bấm trực tiếp vào từng giấy chứng nhận để phóng to kiểm tra chi tiết. (Bật <strong>Chế Độ Chỉnh Sửa</strong> ở góc phải để thêm/xoá hoặc đổi ảnh trực tiếp).</p>
+                </div>
+
+                <!-- Giải thưởng lớn -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                    <h3 class="text-2xl font-extrabold text-brand-900 border-l-4 border-brand-500 pl-4" data-aos="fade-right">Giải Thưởng &amp; Đấu Trường Quốc Tế</h3>
+                </div>
+
+                <div id="awards-grid" class="grid md:grid-cols-3 gap-8 mb-20">
+                    <!-- Giải 1: MAMD -->
+                    <div class="removable-item relative bg-slate-50 rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden hover-card group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="award_mamd.jpg" onclick="handleImageClick(this, 'Giải Khuyến Khích Thiết kế Máy MISUMI MAMD 2026')">
+                            <img src="assets/award_mamd.jpg" alt="Giải Khuyến Khích MAMD" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=award_mamd.jpg'">
+                        </div>
+                        <div class="p-6">
+                            <div class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full mb-3">Giải Thưởng Khu Vực</div>
+                            <h4 class="font-bold text-brand-900 text-lg mb-2">Giải Khuyến Khích MAMD 2026</h4>
+                            <p class="text-slate-600 text-sm mb-3">Cuộc thi Thiết kế Máy tự động hóa MISUMI (Khu vực Toàn Miền Nam)</p>
+                            <p class="text-xs text-slate-500 border-t border-slate-200/80 pt-3">Chủ đề: Thiết kế hệ thống Pick &amp; Place tự động — Đội LH-AUTX.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Giải 2: China Innovation (IoT) -->
+                    <div class="removable-item relative bg-slate-50 rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden hover-card group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="award_china_iot.jpg" onclick="handleImageClick(this, 'Chứng nhận Quốc tế: Dự án IoT Nông Nghiệp (2025)')">
+                            <img src="assets/award_china_iot.jpg" alt="Dự án IoT Nông Nghiệp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=award_china_iot.jpg'">
+                        </div>
+                        <div class="p-6">
+                            <div class="inline-block px-3 py-1 bg-indigo-100 text-brand-700 text-xs font-bold rounded-full mb-3">Đấu Trường Quốc Tế (07/2025)</div>
+                            <h4 class="font-bold text-brand-900 text-lg mb-2">Dự án IoT Nông Nghiệp ĐBSCL</h4>
+                            <p class="text-slate-600 text-sm mb-3">China International College Students' Innovation Competition 2025</p>
+                            <p class="text-xs text-slate-500 border-t border-slate-200/80 pt-3">Đề tài: "Application of IoT Agricultural Sensors in the Mekong River Delta" tại Zhejiang Industry Polytechnic College.</p>
+                        </div>
+                    </div>
+
+                    <!-- Giải 3: China Innovation (AI Chatbot) -->
+                    <div class="removable-item relative bg-slate-50 rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden hover-card group" data-aos="fade-up" data-aos-delay="300">
+                        <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="award_china_ai.jpg" onclick="handleImageClick(this, 'Chứng nhận Quốc tế: Dự án Mental Health AI Chatbot (2025)')">
+                            <img src="assets/award_china_ai.jpg" alt="Dự án AI Chatbot Tâm lý" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=award_china_ai.jpg'">
+                        </div>
+                        <div class="p-6">
+                            <div class="inline-block px-3 py-1 bg-indigo-100 text-brand-700 text-xs font-bold rounded-full mb-3">Đấu Trường Quốc Tế (07/2025)</div>
+                            <h4 class="font-bold text-brand-900 text-lg mb-2">Dự án Mental Health AI Chatbot</h4>
+                            <p class="text-slate-600 text-sm mb-3">China International College Students' Innovation Competition 2025</p>
+                            <p class="text-xs text-slate-500 border-t border-slate-200/80 pt-3">Đề tài: "Mental Health AI Chatbot" theo lời mời từ Zhejiang Industry Polytechnic College.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lộ trình Học vấn & Chứng chỉ -->
+                <div class="grid lg:grid-cols-12 gap-12 mt-12">
+                    <!-- Cột Timeline Học Vấn & Thực Tiễn (4 phần) -->
+                    <div class="lg:col-span-4 space-y-8" data-aos="fade-right">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-2xl font-extrabold text-brand-900 border-l-4 border-brand-500 pl-4">Lộ Trình Đào Tạo &amp; Thực Tiễn</h3>
+                        </div>
+                        <div id="timeline-list" class="relative border-l-2 border-indigo-200 ml-4 pl-7 py-2 space-y-10">
+                            <!-- Mốc 1 -->
+                            <div class="removable-item relative">
+                                <div class="absolute w-4 h-4 bg-brand-600 border-4 border-white shadow rounded-full -left-[37px] top-1"></div>
+                                <span class="text-xs font-mono text-brand-600 font-bold uppercase tracking-wider bg-indigo-50 px-2.5 py-1 rounded">2023 — Hiện tại</span>
+                                <h4 class="text-lg font-extrabold text-brand-900 mt-2">Đại học Lạc Hồng (LHU)</h4>
+                                <p class="text-slate-700 text-sm mt-1 font-semibold">Ngành Công nghệ Kỹ thuật Tự động hoá</p>
+                                <p class="text-slate-500 text-xs mt-2 leading-relaxed">Nghiên cứu thiết kế cơ khí SOLIDWORKS, lập trình PLC, mô phỏng Robot công nghiệp và ứng dụng AI/Machine Learning.</p>
+                            </div>
+                            <!-- Mốc 2 -->
+                            <div class="removable-item relative">
+                                <div class="absolute w-4 h-4 bg-emerald-500 border-4 border-white shadow rounded-full -left-[37px] top-1"></div>
+                                <span class="text-xs font-mono text-emerald-700 font-bold uppercase tracking-wider bg-emerald-50 px-2.5 py-1 rounded">10/2025 — 03/2026</span>
+                                <h4 class="text-lg font-extrabold text-brand-900 mt-2">Đội trưởng Đội tuyển LH_AUTX</h4>
+                                <p class="text-slate-700 text-sm mt-1 font-semibold">Cuộc thi Thiết kế Máy MISUMI MAMD 2026</p>
+                                <p class="text-slate-500 text-xs mt-2 leading-relaxed">Phân công nhiệm vụ, quản lý tiến độ bản vẽ 3D, tính toán kỹ thuật và bảo vệ dự án trước hội đồng giám khảo.</p>
+                            </div>
+                            <!-- Mốc 3 -->
+                            <div class="removable-item relative">
+                                <div class="absolute w-4 h-4 bg-cyan-500 border-4 border-white shadow rounded-full -left-[37px] top-1"></div>
+                                <span class="text-xs font-mono text-cyan-700 font-bold uppercase tracking-wider bg-cyan-50 px-2.5 py-1 rounded">05/2024 — 11/2024</span>
+                                <h4 class="text-lg font-extrabold text-brand-900 mt-2">Học bổng Tiếng Anh STEM</h4>
+                                <p class="text-slate-700 text-sm mt-1 font-semibold">U.S. Embassy &amp; SEAMEO RETRAC</p>
+                                <p class="text-slate-500 text-xs mt-2 leading-relaxed">Hoàn thành chương trình đào tạo 6 tháng về thuật ngữ kỹ thuật, viết báo cáo và thuyết trình dự án STEM bằng tiếng Anh.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG CHỨNG CHỈ (8 phần) -->
+                    <div class="lg:col-span-8">
+                        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                            <h3 class="text-2xl font-extrabold text-brand-900 border-l-4 border-brand-500 pl-4" data-aos="fade-left">Văn Bằng &amp; Chứng Chỉ Chuyên Môn</h3>
+                        </div>
+                        <div id="certs-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- Bằng 1: CSWA -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="50">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_cswa.jpg" onclick="handleImageClick(this, 'Chứng chỉ Quốc tế SOLIDWORKS CAD Design Associate (CSWA)')">
+                                    <img src="assets/cert_cswa.jpg" alt="Chứng chỉ CSWA" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_cswa.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">SOLIDWORKS CSWA</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">Dassault Systèmes</p>
+                                    <p class="text-[11px] text-slate-500">Cấp ngày: 25/10/2025 (ID: C-SPM43FT52Q)</p>
+                                </div>
+                            </div>
+
+                            <!-- Bằng 2: Gemini Google -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="100">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_gemini.jpg" onclick="handleImageClick(this, 'Chứng chỉ Gemini Certified Student - Google for Education')">
+                                    <img src="assets/cert_gemini.jpg" alt="Chứng chỉ Google AI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_gemini.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">Gemini Certified Student</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">Google for Education</p>
+                                    <p class="text-[11px] text-slate-500">Cấp ngày: 02/07/2026. Ứng dụng Google AI.</p>
+                                </div>
+                            </div>
+
+                            <!-- Bằng 3: Python -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="150">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_python.jpg" onclick="handleImageClick(this, 'Chứng nhận Hoàn thành Khóa học Python Cơ Bản - Codelearn')">
+                                    <img src="assets/cert_python.jpg" alt="Chứng chỉ Python" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_python.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">Python Fundamentals</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">Codelearn.io</p>
+                                    <p class="text-[11px] text-slate-500">Hoàn thành: 15/08/2025. Lập trình Python.</p>
+                                </div>
+                            </div>
+
+                            <!-- Bằng 4: Tiếng Anh STEM -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="200">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_english.jpg" onclick="handleImageClick(this, 'Chứng chỉ Tiếng Anh Chuyên ngành STEM 6 Tháng')">
+                                    <img src="assets/cert_english.jpg" alt="Chứng chỉ Tiếng Anh STEM" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_english.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">STEM Englishworks!</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">U.S. Embassy &amp; SEAMEO</p>
+                                    <p class="text-[11px] text-slate-500">Khóa đào tạo 6 tháng tiếng Anh kỹ thuật.</p>
+                                </div>
+                            </div>
+
+                            <!-- Bằng 5: Văn hóa Nhật Bản -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="250">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_culture.jpg" onclick="handleImageClick(this, 'Chứng nhận Hội thảo Văn hóa Doanh nghiệp Nhật Bản')">
+                                    <img src="assets/cert_culture.jpg" alt="Chứng nhận Văn hóa Nhật Bản" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_culture.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">Japanese Corporate Culture</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">Lac Hong University</p>
+                                    <p class="text-[11px] text-slate-500">Tác phong làm việc doanh nghiệp Nhật (03/2026).</p>
+                                </div>
+                            </div>
+
+                            <!-- Bằng 6: ASU Packaging -->
+                            <div class="removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group" data-aos="zoom-in" data-aos-delay="300">
+                                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="cert_asu.jpg" onclick="handleImageClick(this, 'Chứng nhận khóa học Công nghệ từ Arizona State University')">
+                                    <img src="assets/cert_asu.jpg" alt="Chứng chỉ ASU" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=cert_asu.jpg'">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">ASU Tech Pathway</h4>
+                                    <p class="text-xs text-brand-600 font-semibold mb-1">Arizona State University</p>
+                                    <p class="text-[11px] text-slate-500">Cấp ngày: 09/07/2026. Kiến thức quy trình công nghiệp.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 5: ACTIVITIES (KỸ NĂNG MỀM, TRIỂN LÃM DOANH NGHIỆP & NGOẠI KHÓA) ==================== -->
+        <section id="activities" class="px-6 py-24 bg-brand-900 text-white scroll-mt-20 section-spy">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-14 text-center max-w-3xl mx-auto" data-aos="fade-up">
+                    <span class="text-indigo-300 font-bold text-xs uppercase tracking-widest bg-indigo-950 border border-indigo-800 px-3 py-1 rounded-full">Con Người &amp; Tập Thể</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight mt-3">Kỹ Năng Mềm, Trải Nghiệm &amp; Ngoại Khóa</h2>
+                    <p class="text-slate-400 mt-4 text-base sm:text-lg">Bên cạnh chuyên môn kỹ thuật, tôi chủ động tham quan học hỏi tại các triển lãm công nghệ, nhà máy doanh nghiệp, rèn luyện kỹ năng làm việc nhóm và tích cực đóng góp cho cộng đồng.</p>
+                </div>
+
+                <!-- 4 Thẻ Kỹ Năng Mềm Nổi Bật -->
+                <div id="soft-skills-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16" data-aos="fade-up" data-aos-delay="100">
+                    <div class="removable-item relative bg-slate-800/70 border border-slate-700/80 p-6 rounded-2xl">
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-900 border border-slate-700 mb-4" data-filename="soft_leadership.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Lãnh Đạo &amp; Làm Việc Nhóm')">
+                            <img src="assets/soft_leadership.jpg" alt="Minh chứng Lãnh Đạo &amp; Làm Việc Nhóm" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/1e293b/94a3b8?text=soft_leadership.jpg'">
+                            <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                        </div>
+                        <i class="fas fa-users-cog text-2xl text-indigo-400 mb-3"></i>
+                        <h4 class="font-bold text-white text-base mb-1">Lãnh Đạo &amp; Làm Việc Nhóm</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Trưởng nhóm LH_AUTX (6 thành viên), điều phối thiết kế CAD, chia việc và giải quyết xung đột kỹ thuật dưới áp lực tiến độ.</p>
+                    </div>
+                    <div class="removable-item relative bg-slate-800/70 border border-slate-700/80 p-6 rounded-2xl">
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-900 border border-slate-700 mb-4" data-filename="soft_presentation.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Thuyết Trình &amp; Tiếng Anh STEM')">
+                            <img src="assets/soft_presentation.jpg" alt="Minh chứng Thuyết Trình &amp; Tiếng Anh STEM" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/1e293b/94a3b8?text=soft_presentation.jpg'">
+                            <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                        </div>
+                        <i class="fas fa-chalkboard-teacher text-2xl text-emerald-400 mb-3"></i>
+                        <h4 class="font-bold text-white text-base mb-1">Thuyết Trình &amp; Tiếng Anh STEM</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Có thể đọc tài liệu kỹ thuật (Datasheet), viết báo cáo cơ bản và thuyết trình trước hội đồng giám khảo trong nước &amp; quốc tế.</p>
+                    </div>
+                    <div class="removable-item relative bg-slate-800/70 border border-slate-700/80 p-6 rounded-2xl">
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-900 border border-slate-700 mb-4" data-filename="soft_corporate.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Tác Phong Doanh Nghiệp')">
+                            <img src="assets/soft_corporate.jpg" alt="Minh chứng Tác Phong Doanh Nghiệp" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/1e293b/94a3b8?text=soft_corporate.jpg'">
+                            <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                        </div>
+                        <i class="fas fa-industry text-2xl text-amber-400 mb-3"></i>
+                        <h4 class="font-bold text-white text-base mb-1">Tác Phong Doanh Nghiệp</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Thấm nhuần văn hóa doanh nghiệp Nhật Bản (5S, Kaizen, Horenso), kỷ luật an toàn lao động và đúng giờ.</p>
+                    </div>
+                    <div class="removable-item relative bg-slate-800/70 border border-slate-700/80 p-6 rounded-2xl">
+                        <div class="editable-img-wrapper cursor-zoom-in relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-900 border border-slate-700 mb-4" data-filename="soft_community.jpg" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng: Trách Nhiệm Cộng Đồng')">
+                            <img src="assets/soft_community.jpg" alt="Minh chứng Trách Nhiệm Cộng Đồng" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/1e293b/94a3b8?text=soft_community.jpg'">
+                            <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                        </div>
+                        <i class="fas fa-hands-helping text-2xl text-pink-400 mb-3"></i>
+                        <h4 class="font-bold text-white text-base mb-1">Trách Nhiệm Cộng Đồng</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Giao tiếp chuẩn mực với người dân qua chiến dịch Mùa Hè Xanh hỗ trợ hành chính công và các chuyến thiện nguyện vùng cao.</p>
+                    </div>
+                </div>
+
+                <!-- Danh sách Hoạt Động Ngoại Khóa (1 hàng ngang: Trái chạy hình Slider, Phải mô tả 4 ô) -->
+                <div id="activities-list" class="act-list space-y-10">
+                    
+                    <!-- SLIDER 1: Đội Tuyển LH_AUTX & Thi đấu MAMD -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold rounded-full mb-2">Thi Đấu &amp; Làm Việc Nhóm</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Đội Tuyển Thiết Kế Máy LH_AUTX</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Cùng đồng đội thảo luận phương án cơ khí, dựng mô hình 3D và bảo vệ giải pháp tại cuộc thi MISUMI MAMD 2026.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-lhautx rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            <div class="swiper-slide editable-img-wrapper" data-filename="team_1.jpg">
+                    <img src="assets/team_1.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=team_1.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="team_2.jpg">
+                    <img src="assets/team_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=team_2.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_153048818_8823_1_6987_1.png">
+                    <img src="assets/image_2026_10_22_153048818_8823_1_6987_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_153048818_8823_1_6987_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_153014271_4274_1_0107_1.png">
+                    <img src="assets/image_2026_10_22_153014271_4274_1_0107_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_153014271_4274_1_0107_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_152950666_0669_1_3419_1.png">
+                    <img src="assets/image_2026_10_22_152950666_0669_1_3419_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_152950666_0669_1_3419_1.png'">
+                </div></div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act1_ctx">Đội trưởng đội tuyển LH_AUTX (6 thành viên) tại cuộc thi Thiết kế Máy MISUMI MAMD 2026, thực hiện từ 10/2025 đến 03/2026 với đề tài hệ thống máy Pick &amp; Place tự động. Kết quả: Giải Khuyến Khích khu vực Miền Nam.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act1_work">Phân công nhiệm vụ theo thế mạnh từng thành viên, tổ chức các buổi thảo luận để chốt phương án cơ khí, trực tiếp dựng và theo dõi tiến độ mô hình 3D trên SOLIDWORKS, rà soát việc chọn linh kiện tiêu chuẩn MISUMI và tính toán hành trình. Hoàn thiện hồ sơ kỹ thuật, bản vẽ lắp, video mô phỏng nguyên lý và bảo vệ giải pháp trước hội đồng giám khảo.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act1_skill">Quản lý tiến độ và phân công công việc, giao tiếp kỹ thuật trong nhóm, thống nhất khi có nhiều phương án thiết kế khác nhau, làm việc dưới áp lực thời hạn nộp hồ sơ.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act1_value">Đã đi trọn một vòng đời dự án thiết kế máy (ý tưởng → bản vẽ → hồ sơ → bảo vệ), biết phối hợp theo nhóm và bàn giao đúng hạn — sẵn sàng hòa nhập nhanh vào đội thiết kế/CAD tại doanh nghiệp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDER 2: THAM QUAN TRIỂN LÃM KHOA HỌC & TRẢI NGHIỆM DOANH NGHIỆP -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up" data-aos-delay="100">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold rounded-full mb-2">Trải Nghiệm Thực Tế &amp; Công Nghệ</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Tham Quan Triển Lãm Khoa Học &amp; Trải Nghiệm Doanh Nghiệp</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Trực tiếp tìm hiểu dây chuyền sản xuất tại các nhà máy công nghiệp và cập nhật xu hướng thiết bị tự động hóa, robot tại các triển lãm khoa học công nghệ.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-comp rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            <div class="swiper-slide editable-img-wrapper" data-filename="exhib_1.jpg">
+                    <img src="assets/exhib_1.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=exhib_1.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="exhib_2.jpg">
+                    <img src="assets/exhib_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=exhib_2.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_180229383_9392_1.png">
+                    <img src="assets/image_2026_10_24_180229383_9392_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_180229383_9392_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_180243648_5760_1.png">
+                    <img src="assets/image_2026_10_24_180243648_5760_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_180243648_5760_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_153332102_2106_1_6082_1.png">
+                    <img src="assets/image_2026_10_22_153332102_2106_1_6082_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_153332102_2106_1_6082_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_153312241_2245_1_8526_1.png">
+                    <img src="assets/image_2026_10_22_153312241_2245_1_8526_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_153312241_2245_1_8526_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_153347262_7265_1_7501_1.png">
+                    <img src="assets/image_2026_10_22_153347262_7265_1_7501_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_153347262_7265_1_7501_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_181426898_6903_1.png">
+                    <img src="assets/image_2026_10_24_181426898_6903_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_181426898_6903_1.png'">
+                </div></div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act2_ctx_exhib">Tham gia các đợt kiến tập, tham quan nhà máy sản xuất công nghiệp do Khoa/Trường tổ chức và chủ động tham dự các triển lãm quốc tế về máy móc, tự động hóa và khoa học công nghệ.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act2_work_exhib">Quan sát trực tiếp dây chuyền lắp ráp tự động, hệ thống băng tải, cánh tay robot công nghiệp và quy trình kiểm soát chất lượng (QC) tại nhà xưởng; trao đổi kỹ thuật tại các gian hàng triển lãm để tìm hiểu cảm biến, cơ cấu chấp hành và giải pháp CAD/CAM mới.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act2_skill_exhib">Khả năng quan sát và phân tích hệ thống máy móc thực tế, đối chiếu lý thuyết với dây chuyền công nghiệp, nắm bắt tiêu chuẩn an toàn – 5S tại nhà máy và mở rộng kiến thức về linh kiện tiêu chuẩn trên thị trường.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act2_value_exhib">Không bỡ ngỡ trước môi trường và kỷ luật nhà xưởng; có cái nhìn thực tế về cách bố trí layout máy móc, lựa chọn thiết bị phù hợp khi thiết kế cơ khí 3D và tích hợp hệ thống tự động hóa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDER 3: Thực hành Xưởng & Phối hợp Đồ án -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold rounded-full mb-2">Kỹ Năng Thực Hành &amp; Teamwork</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Thực Hành Phòng Lab &amp; Làm Việc Nhóm</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Phối hợp cùng bạn học lắp ráp mô hình, đấu nối PLC, chạy thử nghiệm Robot và hỗ trợ nhau trong các học phần thực hành tại ĐH Lạc Hồng.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-workshop rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                
+            
+                
+            
+                
+            
+                
+            <div class="swiper-slide editable-img-wrapper" data-filename="workshop_2.jpg">
+                    <img src="assets/workshop_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=workshop_2.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_181542136_2141_1.png">
+                    <img src="assets/image_2026_10_24_181542136_2141_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_181542136_2141_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_181552411_2417_1.png">
+                    <img src="assets/image_2026_10_24_181552411_2417_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_181552411_2417_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_24_181607110_8680_1.png">
+                    <img src="assets/image_2026_10_24_181607110_8680_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_24_181607110_8680_1.png'">
+                </div></div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act3_ctx">Các học phần thực hành chuyên ngành Công nghệ Kỹ thuật Tự động hoá tại Đại học Lạc Hồng, làm việc theo nhóm với bạn học trong phòng Lab.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act3_work">Cùng nhóm lắp ráp mô hình, đấu nối tín hiệu vào/ra PLC theo sơ đồ, nạp chương trình, chạy thử và hiệu chỉnh hệ thống; thử nghiệm Robot công nghiệp; ghi nhận lỗi và hỗ trợ nhau khắc phục khi thiết bị không chạy như mong đợi.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act3_skill">Đọc sơ đồ điện – khí nén, tư duy tìm lỗi (debug) có hệ thống, tuân thủ quy tắc an toàn phòng thực hành, chia việc và phối hợp nhịp nhàng trong nhóm.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act3_value">Đã quen với thiết bị thực và quy trình lắp – đấu nối – chạy thử, giúp rút ngắn thời gian làm quen khi hỗ trợ lắp đặt, vận hành hoặc chạy thử máy tại xưởng.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDER 4: Mùa Hè Xanh 2025 -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up" data-aos-delay="100">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold rounded-full mb-2">Chiến Dịch Tình Nguyện</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Mùa Hè Xanh 2025 — Hỗ Trợ Hành Chính Công</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Đóng góp sức trẻ hỗ trợ người dân thực hiện các thủ tục hành chính công và số hóa hồ sơ sau quá trình sáp nhập Phường.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-muahexanh rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            <div class="swiper-slide editable-img-wrapper" data-filename="admin_1.jpg">
+                    <img src="assets/admin_1.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=admin_1.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="admin_2.jpg">
+                    <img src="assets/admin_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=admin_2.jpg'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_140347241_7246_1.png">
+                    <img src="assets/image_2026_10_22_140347241_7246_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_140347241_7246_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_140359192_9196_1.png">
+                    <img src="assets/image_2026_10_22_140359192_9196_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_140359192_9196_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_140407686_7691_1.png">
+                    <img src="assets/image_2026_10_22_140407686_7691_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_140407686_7691_1.png'">
+                </div><div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_22_140426763_6767_1.png">
+                    <img src="assets/image_2026_10_22_140426763_6767_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_22_140426763_6767_1.png'">
+                </div></div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act4_ctx">Tình nguyện viên chiến dịch Mùa Hè Xanh 2025, hỗ trợ người dân thực hiện thủ tục hành chính công và số hóa hồ sơ sau quá trình sáp nhập Phường.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act4_work">Tiếp đón và hướng dẫn người dân kê khai thủ tục, kiểm tra tính đầy đủ của hồ sơ, hỗ trợ nhập liệu và số hóa hồ sơ giấy; phối hợp với cán bộ địa phương và các bạn trong đội để xử lý lượng công việc phát sinh.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act4_skill">Giao tiếp chuẩn mực và kiên nhẫn với nhiều nhóm tuổi, cẩn thận và chính xác khi xử lý dữ liệu, ý thức bảo mật thông tin cá nhân, phản ứng linh hoạt khi gặp tình huống mới.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act4_value">Tác phong phục vụ, độ chính xác khi nhập liệu và kỷ luật xử lý hồ sơ — phù hợp với công việc có yêu cầu cao về tài liệu và quy trình như hồ sơ kỹ thuật, kiểm soát chất lượng.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDER 5: Thiện nguyện B'sumrac -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold rounded-full mb-2">Thiện Nguyện Cộng Đồng</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Thiện Nguyện Nhà Thờ B'sumrac, Bảo Lộc</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Lan tỏa tinh thần tương thân tương ái, chuẩn bị quà tặng và tổ chức sinh hoạt gắn kết cùng trẻ em, bà con tại TP. Bảo Lộc.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-bsumrac rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                <div class="swiper-slide editable-img-wrapper" data-filename="bsumrac_1.jpg">
+                    <img src="assets/bsumrac_1.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=bsumrac_1.jpg'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="bsumrac_2.jpg">
+                    <img src="assets/bsumrac_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=bsumrac_2.jpg'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_26_211639814_9817_1.png">
+                    <img src="assets/image_2026_10_26_211639814_9817_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_26_211639814_9817_1.png'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_26_211652529_2532_1.png">
+                    <img src="assets/image_2026_10_26_211652529_2532_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_26_211652529_2532_1.png'">
+                </div>
+            </div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act5_ctx">Hoạt động thiện nguyện tại Nhà thờ B'sumrac, TP. Bảo Lộc, gắn kết cùng trẻ em và bà con địa phương.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act5_work">Tham gia chuẩn bị quà tặng, sắp xếp địa điểm và tổ chức các hoạt động sinh hoạt tập thể với trẻ em và bà con; phối hợp cùng các tình nguyện viên khác theo phân công chung của chương trình.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act5_skill">Chuẩn bị hậu cần và tổ chức hoạt động, giao tiếp gần gũi với trẻ em và người lớn tuổi, tinh thần chủ động nhận việc và làm việc nhóm không cần giám sát chặt.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act5_value">Tinh thần trách nhiệm và sự chủ động, sẵn sàng nhận phần việc phát sinh trong dự án nhóm.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDER 6: Thiện nguyện Lộc An -->
+                    <div class="act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80" data-aos="fade-up" data-aos-delay="100">
+                        <div class="act-header-col mb-5">
+                            <span class="inline-block px-3 py-1 bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold rounded-full mb-2">Thiện Nguyện Cộng Đồng</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Thiện Nguyện Nhà Thờ Lộc An, Bảo Lộc</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm">Hành trình sẻ chia yêu thương và rèn luyện kỹ năng tổ chức hoạt động tập thể cùng đội ngũ tình nguyện viên tại Bảo Lộc.</p>
+                        </div>
+                        <div class="act-media-col space-y-2">
+                            <div class="swiper swiper-locan rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                                <div class="swiper-wrapper">
+                <div class="swiper-slide editable-img-wrapper" data-filename="locan_1.jpg">
+                    <img src="assets/locan_1.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=locan_1.jpg'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="locan_2.jpg">
+                    <img src="assets/locan_2.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=locan_2.jpg'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_26_211457348_8951_1.png">
+                    <img src="assets/image_2026_10_26_211457348_8951_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_26_211457348_8951_1.png'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_26_211531660_1665_1.png">
+                    <img src="assets/image_2026_10_26_211531660_1665_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_26_211531660_1665_1.png'">
+                </div>
+            
+                <div class="swiper-slide editable-img-wrapper" data-filename="image_2026_10_26_211546320_6323_1.png">
+                    <img src="assets/image_2026_10_26_211546320_6323_1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=image_2026_10_26_211546320_6323_1.png'">
+                </div>
+            </div>
+                                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                            <div>
+                                <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh &amp; Vai trò</p>
+                                <p class="act-text" data-edit-key="act6_ctx">Hoạt động thiện nguyện tại Nhà thờ Lộc An, TP. Bảo Lộc, cùng đội ngũ tình nguyện viên.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                                <p class="act-text" data-edit-key="act6_work">Cùng đội chuẩn bị quà, chia nhóm phụ trách từng phần việc của chương trình, giữ trật tự và bảo đảm an toàn cho các em nhỏ trong suốt buổi sinh hoạt.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                                <p class="act-text" data-edit-key="act6_skill">Tổ chức hoạt động tập thể, điều phối nhân sự trong một sự kiện, quản lý thời gian chương trình và xử lý nhanh các tình huống phát sinh.</p>
+                            </div>
+                            <div>
+                                <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                                <p class="act-text" data-edit-key="act6_value">Kinh nghiệm tổ chức và điều phối một hoạt động nhiều người tham gia — nền tảng cho vai trò phối hợp nhóm và theo dõi tiến độ dự án.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 6: CONTACT ==================== -->
+        <section id="contact" class="px-6 py-24 scroll-mt-20 section-spy bg-white">
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=nnhat3884@gmail.com&amp;su=Li%C3%AAn%20h%E1%BB%87%20c%C6%A1%20h%E1%BB%99i%20th%E1%BB%B1c%20t%E1%BA%ADp" target="_blank" rel="noopener" class="px-7 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all shadow-sm font-semibold flex items-center">
+                    <i class="fas fa-envelope text-xl mr-3"></i> <span>Gửi Email Liên Hệ</span>
+                </a>
+                <a href="https://zalo.me/SS0941770959" target="_blank" rel="noopener" class="px-7 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all shadow-sm font-semibold flex items-center">
+                    <i class="fas fa-comment-dots text-xl mr-3"></i> <span>Nhắn Zalo</span>
+                </a>
+                <a href="tel:+84 941770959" class="px-7 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all shadow-sm font-semibold flex items-center">
+                    <i class="fas fa-phone-alt text-xl mr-3"></i> <span>Gọi Điện</span>
+                </a>
+                <a href="https://www.linkedin.com/in/nmn232205/" target="_blank" rel="noopener" class="px-7 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all shadow-sm font-semibold flex items-center">
+                    <i class="fab fa-linkedin text-xl mr-3"></i> <span>Hồ sơ LinkedIn</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER CHUNG -->
+    <footer class="py-8 bg-slate-50 border-t border-slate-200 text-center mt-auto">
+        <p class="text-sm text-slate-400 font-medium">© 2026 Designed &amp; Engineered by <strong>Nguyễn Minh Nhật</strong> (Lac Hong University).</p>
+    </footer>
+
+    <!-- SCRIPTS: Swiper.js, AOS.js & Hệ thống (+ Thêm Ảnh) / (+ Thêm Mục) Toàn Diện -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        const DB_NAME = 'portfolioDB_v2';
+        const DB_STORE = 'images';
+        const LS_MAIN_HTML = 'pf_full_main_html_v2';
+
+        let isEditMode = false;
+        let currentTargetWrapper = null;
+        let currentMediaHost = null; // Khung ảnh hoặc Swiper đang được bấm (+ Thêm ảnh)
+        let projectDirHandle = null;
+        let dbPromise = null;
+        const blobUrls = {};
+
+        const fileInput = document.getElementById('smart-file-input');
+        const multiSlideInput = document.getElementById('multi-slide-input');
+
+        // 1. Khởi tạo toàn bộ Swiper Slider (tự gắn thêm Slide "+ Thêm ảnh" ở cuối mỗi Slider khi bật Edit Mode)
+        function initAllSwipers() {
+            document.querySelectorAll('.swiper').forEach(swiperEl => {
+                if (swiperEl.swiper) {
+                    swiperEl.swiper.destroy(true, true);
+                }
+                swiperEl.querySelectorAll('.swiper-slide-duplicate, .swiper-add-slide').forEach(el => el.remove());
+
+                const wrapper = swiperEl.querySelector('.swiper-wrapper');
+                if (isEditMode && wrapper) {
+                    const addSlide = document.createElement('div');
+                    addSlide.className = 'swiper-slide swiper-add-slide flex flex-col items-center justify-center bg-slate-900/95 border-4 border-dashed border-indigo-400 text-indigo-300 cursor-pointer hover:bg-indigo-950/90 hover:text-white transition-all p-6 text-center select-none';
+                    addSlide.innerHTML = `
+                        <i class="fas fa-plus-circle text-4xl mb-2 text-indigo-400"></i>
+                        <p class="font-extrabold text-sm">+ Thêm ảnh mới vào đây</p>
+                        <p class="text-[11px] text-slate-400 mt-1">Tự động lưu vào thư mục assets/ & cập nhật code</p>
+                    `;
+                    addSlide.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        triggerAddImagesToHost(swiperEl);
+                    });
+                    wrapper.appendChild(addSlide);
+                }
+
+                const realSlideCount = swiperEl.querySelectorAll('.swiper-slide:not(.swiper-add-slide)').length;
+                new Swiper(swiperEl, {
+                    loop: !isEditMode && realSlideCount > 1,
+                    grabCursor: true,
+                    autoplay: (!isEditMode && realSlideCount > 1) ? { delay: 3800, disableOnInteraction: false } : false,
+                    pagination: {
+                        el: swiperEl.querySelector('.swiper-pagination'),
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: swiperEl.querySelector('.swiper-button-next'),
+                        prevEl: swiperEl.querySelector('.swiper-button-prev')
+                    }
+                });
+            });
+        }
+
+        // 2. Tạo dãy ảnh thu nhỏ + Ô [+ Thêm ảnh] nằm ngay sau ảnh cuối cùng cho MỌI KHUNG HÌNH trên trang
+        function renderMediaThumbStrips() {
+            document.querySelectorAll('.media-thumbs-strip').forEach(el => el.remove());
+            if (!isEditMode) return;
+
+            // 2.1. Đối với tất cả các khung Swiper Slider (Hoạt động ngoại khóa & các mục đã có nhiều ảnh)
+            document.querySelectorAll('.swiper').forEach(swiperEl => {
+                const slides = Array.from(swiperEl.querySelectorAll('.swiper-slide:not(.swiper-slide-duplicate):not(.swiper-add-slide)'));
+                const strip = document.createElement('div');
+                strip.className = 'media-thumbs-strip edit-only flex-wrap items-center gap-2 mt-2.5 p-2 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-inner';
+
+                slides.forEach((sl, idx) => {
+                    const fname = sl.getAttribute('data-filename') || `img_${idx + 1}.jpg`;
+                    const imgEl = sl.querySelector('img');
+                    const src = blobUrls[fname] || (imgEl ? imgEl.getAttribute('src') : ('assets/' + fname));
+
+                    const thumb = document.createElement('div');
+                    thumb.className = 'relative group/thumb w-14 h-11 rounded-lg overflow-hidden border border-slate-600 bg-slate-800 shrink-0 cursor-pointer hover:border-indigo-400 transition-all';
+                    thumb.title = `Ảnh ${idx + 1}: ${fname} (Bấm để đổi ảnh này)`;
+                    thumb.innerHTML = `
+                        <img src="${src}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x80/1e293b/94a3b8?text=${idx + 1}'">
+                        <span class="absolute bottom-0 left-0 right-0 bg-slate-950/80 text-[9px] text-white text-center font-mono truncate px-0.5">#${idx + 1}</span>
+                        <button type="button" class="del-thumb-btn absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-red-600 text-white text-[9px] flex items-center justify-center opacity-90 hover:scale-110" title="Xoá ảnh này">&times;</button>
+                    `;
+                    thumb.addEventListener('click', (e) => {
+                        if (e.target.closest('.del-thumb-btn')) return;
+                        e.stopPropagation();
+                        if (swiperEl.swiper) swiperEl.swiper.slideTo(idx);
+                        currentTargetWrapper = sl;
+                        fileInput.click();
+                    });
+                    thumb.querySelector('.del-thumb-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeSlideAtIndex(swiperEl, idx);
+                    });
+                    strip.appendChild(thumb);
+                });
+
+                // Ô [+ Thêm ảnh] nằm ngay sau tấm ảnh cuối cùng
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.className = 'h-11 px-3 rounded-lg border-2 border-dashed border-emerald-400 bg-emerald-500/15 hover:bg-emerald-500 hover:text-white text-emerald-300 text-xs font-extrabold flex items-center gap-1.5 shrink-0 transition-all shadow';
+                addBtn.innerHTML = `<i class="fas fa-plus-circle"></i><span>+ Thêm ảnh</span>`;
+                addBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    triggerAddImagesToHost(swiperEl);
+                });
+                strip.appendChild(addBtn);
+
+                swiperEl.insertAdjacentElement('afterend', strip);
+            });
+
+            // 2.2. Đối với các khung đang có 1 ảnh đơn (Kỹ năng, Dự án, Giải thưởng, Chứng chỉ, Kỹ năng mềm)
+            document.querySelectorAll('#portfolio-main .editable-img-wrapper').forEach(wrapper => {
+                if (wrapper.closest('.swiper') || wrapper.closest('#about')) return; // Bỏ qua slide trong Swiper và Avatar
+
+                const fname = wrapper.getAttribute('data-filename') || 'image.jpg';
+                const imgEl = wrapper.querySelector('img');
+                const src = blobUrls[fname] || (imgEl ? imgEl.getAttribute('src') : ('assets/' + fname));
+
+                const strip = document.createElement('div');
+                strip.className = 'media-thumbs-strip edit-only flex-wrap items-center gap-2 mt-2 p-2 rounded-xl bg-slate-900/90 border border-slate-700 text-white z-30 relative';
+                strip.innerHTML = `
+                    <div class="change-single-thumb relative w-12 h-10 rounded-lg overflow-hidden border border-slate-500 bg-slate-800 shrink-0 cursor-pointer hover:border-indigo-400" title="Bấm để đổi ảnh hiện tại (${fname})">
+                        <img src="${src}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x80/1e293b/94a3b8?text=1'">
+                        <span class="absolute bottom-0 inset-x-0 bg-slate-950/80 text-[9px] text-center font-mono">#1</span>
+                    </div>
+                    <button type="button" class="add-more-img-btn h-10 px-3 rounded-lg border-2 border-dashed border-emerald-400 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-extrabold flex items-center gap-1.5 transition-all">
+                        <i class="fas fa-plus-circle"></i><span>+ Thêm ảnh</span>
+                    </button>
+                `;
+                strip.querySelector('.change-single-thumb').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    currentTargetWrapper = wrapper;
+                    fileInput.click();
+                });
+                strip.querySelector('.add-more-img-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    triggerAddImagesToHost(wrapper);
+                });
+
+                wrapper.insertAdjacentElement('afterend', strip);
+            });
+        }
+
+        // 3. Tạo Thẻ [+ Thêm ...] nằm ngay vị trí cuối cùng của TẤT CẢ các phần trên giao diện
+        function renderSectionAddCards() {
+            document.querySelectorAll('.section-add-card').forEach(el => el.remove());
+
+            const configs = [
+                {
+                    containerId: 'skills-grid',
+                    title: '+ Thêm Nhóm Kỹ Năng Mới',
+                    sub: 'Tự động thêm vào cuối danh sách & chọn ảnh minh chứng',
+                    dark: false,
+                    handler: () => addNewSkillCard(true)
+                },
+                {
+                    containerId: 'projects-container',
+                    title: '+ Thêm Dự Án Kỹ Thuật Mới',
+                    sub: 'Tự động tạo khung dự án chuẩn P-A-R ở cuối danh sách & chọn ảnh/GIF',
+                    dark: false,
+                    handler: () => addNewProjectCard(true)
+                },
+                {
+                    containerId: 'awards-grid',
+                    title: '+ Thêm Giải Thưởng Mới',
+                    sub: 'Thêm thẻ giải thưởng vào cuối hàng & chọn ảnh giấy chứng nhận',
+                    dark: false,
+                    handler: () => addNewAwardCard(true)
+                },
+                {
+                    containerId: 'timeline-list',
+                    title: '+ Thêm Cột Mốc Đào Tạo / Thực Tiễn',
+                    sub: 'Thêm mốc mới vào cuối lộ trình',
+                    dark: false,
+                    handler: () => addNewTimelineItem()
+                },
+                {
+                    containerId: 'certs-grid',
+                    title: '+ Thêm Văn Bằng / Chứng Chỉ Mới',
+                    sub: 'Thêm chứng chỉ vào cuối danh sách & tải ảnh bằng cấp lên',
+                    dark: false,
+                    handler: () => addNewCertCard(true)
+                },
+                {
+                    containerId: 'soft-skills-grid',
+                    title: '+ Thêm Thẻ Kỹ Năng Mềm Mới',
+                    sub: 'Thêm kỹ năng mềm vào cuối hàng & chọn ảnh minh chứng',
+                    dark: true,
+                    handler: () => addNewSoftSkillCard(true)
+                },
+                {
+                    containerId: 'activities-list',
+                    title: '+ Thêm Hoạt Động / Trải Nghiệm Mới',
+                    sub: 'Thêm hàng hoạt động mới (1 bên chạy ảnh Slider, 1 bên 4 ô mô tả) vào cuối danh sách',
+                    dark: true,
+                    handler: () => addNewActivityRow(true)
+                }
+            ];
+
+            configs.forEach(cfg => {
+                const container = document.getElementById(cfg.containerId);
+                if (!container) return;
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = cfg.dark
+                    ? 'section-add-card edit-only w-full min-h-[180px] p-6 rounded-3xl border-2 border-dashed border-indigo-400/70 bg-slate-800/40 hover:bg-indigo-950/60 hover:border-indigo-300 text-indigo-200 flex-col items-center justify-center gap-2 transition-all cursor-pointer shadow-lg text-center'
+                    : 'section-add-card edit-only w-full min-h-[180px] p-6 rounded-3xl border-2 border-dashed border-brand-500/70 bg-indigo-50/40 hover:bg-indigo-50 hover:border-brand-600 text-brand-600 flex-col items-center justify-center gap-2 transition-all cursor-pointer shadow-sm text-center';
+                card.innerHTML = `
+                    <i class="fas fa-plus-circle text-3xl"></i>
+                    <span class="font-extrabold text-sm sm:text-base">${cfg.title}</span>
+                    <span class="text-xs opacity-75 max-w-md">${cfg.sub}</span>
+                `;
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cfg.handler();
+                });
+                container.appendChild(card);
+            });
+        }
+
+        // 4. Gắn nút Xoá / Đổi vị trí cho từng mục + Render các ô [+ Thêm]
+        function decorateEditableControls() {
+            document.querySelectorAll('.removable-item').forEach(item => {
+                if (item.querySelector('.item-action-bar')) return;
+                const bar = document.createElement('div');
+                bar.className = 'item-action-bar edit-only absolute top-3 right-3 z-40 items-center gap-1.5 bg-slate-900/85 backdrop-blur px-2.5 py-1.5 rounded-full shadow-lg border border-slate-700';
+                bar.innerHTML = `
+                    <button type="button" onclick="moveItem(this, -1)" class="w-6 h-6 rounded-full bg-slate-700 hover:bg-indigo-600 text-white text-xs flex items-center justify-center" title="Đẩy lên trước"><i class="fas fa-arrow-up"></i></button>
+                    <button type="button" onclick="moveItem(this, 1)" class="w-6 h-6 rounded-full bg-slate-700 hover:bg-indigo-600 text-white text-xs flex items-center justify-center" title="Đẩy xuống sau"><i class="fas fa-arrow-down"></i></button>
+                    <button type="button" onclick="removeItem(this)" class="w-6 h-6 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs flex items-center justify-center" title="Xoá mục này"><i class="fas fa-trash-alt"></i></button>
+                `;
+                item.appendChild(bar);
+            });
+
+            renderSectionAddCards();
+            renderMediaThumbStrips();
+        }
+
+        // 5. Thêm nhiều ảnh vào bất kỳ Slider nào HOẶC nâng cấp 1 ảnh đơn thành Slider nhiều ảnh
+        function triggerAddImagesToHost(hostEl) {
+            currentMediaHost = hostEl;
+            multiSlideInput.click();
+        }
+
+        function getCleanSlidesData(swiperEl) {
+            const wrapper = swiperEl.querySelector('.swiper-wrapper');
+            const slides = Array.from(wrapper.querySelectorAll('.swiper-slide:not(.swiper-slide-duplicate):not(.swiper-add-slide)'));
+            return slides.map(s => {
+                const img = s.querySelector('img');
+                return {
+                    filename: s.getAttribute('data-filename') || 'slide.jpg',
+                    src: img ? img.getAttribute('src') : ''
+                };
+            });
+        }
+
+        function rebuildSwiperSlides(swiperEl, slidesData) {
+            if (swiperEl.swiper) swiperEl.swiper.destroy(true, true);
+            const wrapper = swiperEl.querySelector('.swiper-wrapper');
+            wrapper.innerHTML = slidesData.map(s => `
+                <div class="swiper-slide editable-img-wrapper" data-filename="${s.filename}">
+                    <img src="${blobUrls[s.filename] || s.src || ('assets/' + s.filename)}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=${encodeURIComponent(s.filename)}'">
+                </div>
+            `).join('');
+            initAllSwipers();
+            renderMediaThumbStrips();
+        }
+
+        function removeSlideAtIndex(swiperEl, index) {
+            const slidesData = getCleanSlidesData(swiperEl);
+            if (slidesData.length <= 1) {
+                toast('Cần giữ lại ít nhất 1 hình ảnh trong mục này.');
+                return;
+            }
+            slidesData.splice(index, 1);
+            rebuildSwiperSlides(swiperEl, slidesData);
+            persistStateAndAutoWriteCode('Đã xoá ảnh khỏi khung trượt.');
+        }
+
+        // Nâng cấp 1 khung ảnh đơn (.editable-img-wrapper) thành khung chạy nhiều ảnh (.swiper)
+        function upgradeSingleWrapperToSwiper(wrapperEl) {
+            const oldFilename = wrapperEl.getAttribute('data-filename') || 'img_1.jpg';
+            const oldImg = wrapperEl.querySelector('img');
+            const oldSrc = oldImg ? oldImg.getAttribute('src') : ('assets/' + oldFilename);
+
+            // Giữ lại các nhãn nổi (badge) nếu có
+            const badges = Array.from(wrapperEl.querySelectorAll('span'));
+
+            // Chuyển wrapper hiện tại thành khung chứa Swiper giữ nguyên kích thước/tỷ lệ
+            wrapperEl.classList.remove('editable-img-wrapper', 'cursor-zoom-in', 'flex', 'items-center', 'justify-center', 'p-6');
+            wrapperEl.removeAttribute('data-filename');
+            wrapperEl.removeAttribute('onclick');
+
+            const isProjectCol = wrapperEl.classList.contains('lg:w-5/12');
+            const heightClass = isProjectCol ? 'w-full h-72 lg:h-full min-h-[18rem]' : 'w-full h-full';
+
+            wrapperEl.innerHTML = `
+                <div class="swiper ${heightClass}">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide editable-img-wrapper" data-filename="${oldFilename}">
+                            <img src="${oldSrc}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=${encodeURIComponent(oldFilename)}'">
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            `;
+
+            badges.forEach(b => {
+                b.classList.add('z-30', 'pointer-events-none');
+                wrapperEl.appendChild(b);
+            });
+
+            return wrapperEl.querySelector('.swiper');
+        }
+
+        multiSlideInput.addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files || []);
+            if (!files.length || !currentMediaHost) return;
+
+            let targetSwiper = currentMediaHost.classList.contains('swiper')
+                ? currentMediaHost
+                : upgradeSingleWrapperToSwiper(currentMediaHost);
+
+            const slidesData = getCleanSlidesData(targetSwiper);
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const ext = ((file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '')) || 'jpg';
+                const cleanBase = file.name.replace(/\.[^/.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'img';
+                const filename = `${cleanBase}_${Date.now().toString().slice(-4)}_${i + 1}.${ext}`;
+                await saveImageAndWriteToAssets(filename, file);
+                slidesData.push({ filename, src: 'assets/' + filename });
+            }
+
+            rebuildSwiperSlides(targetSwiper, slidesData);
+            await persistStateAndAutoWriteCode(`Đã thêm ${files.length} ảnh mới vào mục này & lưu vào code!`);
+            multiSlideInput.value = '';
+        });
+
+        // 6. Bật / Tắt khả năng sửa chữ trên toàn trang
+        function setAllTextEditable(enabled) {
+            const selectors = 'h1, h2, h3, h4, p, li, span:not(.swiper-pagination-bullet), a';
+            document.querySelectorAll('#portfolio-main ' + selectors + ', footer ' + selectors).forEach(el => {
+                if (el.closest('.item-action-bar') || el.closest('.media-thumbs-strip') || el.closest('.section-add-card') || el.closest('.swiper-add-slide') || el.closest('.edit-only')) return;
+                if (el.children.length > 0 && el.tagName === 'DIV') return;
+                if (enabled) {
+                    el.setAttribute('contenteditable', 'true');
+                } else {
+                    el.removeAttribute('contenteditable');
+                }
+            });
+        }
+
+        function toggleImageEditMode() {
+            isEditMode = !isEditMode;
+            document.body.classList.toggle('edit-image-mode', isEditMode);
+            const btnText = document.getElementById('toggle-edit-text');
+            const banner = document.getElementById('edit-mode-Banner');
+            const btn = document.getElementById('toggle-edit-btn');
+
+            if (isEditMode) {
+                btnText.textContent = 'Đang bật Chỉnh Sửa (Bấm để đóng)';
+                btn.classList.add('bg-brand-600', 'text-white', 'border-brand-600');
+                btn.classList.remove('bg-white', 'text-slate-800');
+                banner.classList.remove('hidden');
+            } else {
+                btnText.textContent = 'Bật Chế Độ Chỉnh Sửa';
+                btn.classList.remove('bg-brand-600', 'text-white', 'border-brand-600');
+                btn.classList.add('bg-white', 'text-slate-800');
+                banner.classList.add('hidden');
+            }
+
+            initAllSwipers();
+            decorateEditableControls();
+            setAllTextEditable(isEditMode);
+        }
+
+        // 7. Xoá hoặc Di chuyển bất kỳ mục nào
+        function removeItem(btnEl) {
+            const item = btnEl.closest('.removable-item');
+            if (!item) return;
+            if (!confirm('Bạn có chắc muốn xoá mục này?')) return;
+            item.remove();
+            persistStateAndAutoWriteCode('Đã xoá mục và cập nhật mã nguồn.');
+        }
+
+        function moveItem(btnEl, direction) {
+            const item = btnEl.closest('.removable-item');
+            if (!item || !item.parentElement) return;
+            const parent = item.parentElement;
+            if (direction < 0 && item.previousElementSibling && !item.previousElementSibling.classList.contains('section-add-card')) {
+                parent.insertBefore(item, item.previousElementSibling);
+            } else if (direction > 0 && item.nextElementSibling && !item.nextElementSibling.classList.contains('section-add-card')) {
+                parent.insertBefore(item.nextElementSibling, item);
+            }
+            persistStateAndAutoWriteCode('Đã đổi vị trí mục.');
+        }
+
+        // 8. Các hàm THÊM MỤC MỚI ở cuối mỗi phần (kèm mở hộp thoại chọn ảnh ngay lập tức)
+        function insertBeforeAddCard(containerId, newEl, autoPickImage) {
+            const container = document.getElementById(containerId);
+            const addCard = container.querySelector('.section-add-card');
+            if (addCard) {
+                container.insertBefore(newEl, addCard);
+            } else {
+                container.appendChild(newEl);
+            }
+            initAllSwipers();
+            decorateEditableControls();
+            setAllTextEditable(isEditMode);
+            AOS.refresh();
+            newEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            persistStateAndAutoWriteCode('Đã thêm mục mới vào cuối danh sách!');
+
+            if (autoPickImage) {
+                const sw = newEl.querySelector('.swiper');
+                const singleWrap = newEl.querySelector('.editable-img-wrapper');
+                if (sw) {
+                    currentMediaHost = sw;
+                    multiSlideInput.click();
+                } else if (singleWrap) {
+                    currentTargetWrapper = singleWrap;
+                    fileInput.click();
+                }
+            }
+        }
+
+        function addNewSkillCard(autoPick) {
+            const fname = `skill_custom_${Date.now().toString().slice(-4)}.jpg`;
+            const div = document.createElement('div');
+            div.className = 'removable-item relative p-8 bg-slate-50/70 rounded-3xl border border-slate-200/80 hover-card group';
+            div.innerHTML = `
+                <div class="w-14 h-14 bg-white text-brand-600 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fas fa-cogs"></i></div>
+                <h3 class="text-2xl font-bold text-brand-900 mb-3">Tên Nhóm Kỹ Năng Mới</h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">Bấm vào đây để nhập mô tả chi tiết về năng lực kỹ thuật và công cụ bạn sử dụng.</p>
+                <div class="editable-img-wrapper cursor-zoom-in relative aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 mb-6" data-filename="${fname}" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng')">
+                    <img src="assets/${fname}" alt="Minh chứng kỹ năng" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=${fname}'">
+                    <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                </div>
+                <div class="pt-4 border-t border-slate-200/80 leading-relaxed font-mono text-xs sm:text-sm">
+                    <span class="text-brand-600 font-semibold">Kỹ năng 1, Kỹ năng 2, Kỹ năng 3</span>
+                </div>
+            `;
+            insertBeforeAddCard('skills-grid', div, autoPick);
+        }
+
+        function addNewProjectCard(autoPick) {
+            const fname = `project_${Date.now().toString().slice(-4)}.jpg`;
+            const div = document.createElement('div');
+            div.className = 'project-card removable-item relative bg-white rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-slate-200/80 shadow-sm hover-card';
+            div.setAttribute('data-category', 'cad ai auto');
+            div.innerHTML = `
+                <div class="lg:w-5/12 h-72 lg:h-auto relative bg-slate-900 editable-img-wrapper cursor-zoom-in" data-filename="${fname}" onclick="handleImageClick(this, 'Dự án kỹ thuật mới')">
+                    <img src="assets/${fname}" alt="Dự án mới" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=${fname}'">
+                    <span class="absolute top-4 left-4 bg-brand-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow">Nhãn Dự Án</span>
+                </div>
+                <div class="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="text-brand-600 font-extrabold tracking-widest text-xs uppercase">Lĩnh vực dự án</span>
+                        <span class="text-slate-300">•</span>
+                        <span class="text-xs font-semibold text-slate-500">Vai trò của bạn</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-900 mb-4">Tên Dự Án Kỹ Thuật Mới (Bấm để sửa)</h3>
+                    <div class="space-y-3 text-sm text-slate-600 mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                        <p><strong class="text-slate-900"><i class="fas fa-crosshairs text-brand-500 mr-1.5"></i>Bài toán:</strong> Mô tả bài toán và yêu cầu đặt ra của dự án.</p>
+                        <p><strong class="text-slate-900"><i class="fas fa-user-cog text-brand-500 mr-1.5"></i>Vai trò & Giải pháp:</strong> Nêu rõ công cụ, thuật toán hoặc phương án thiết kế bạn đã trực tiếp thực hiện.</p>
+                        <p><strong class="text-slate-900"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Kết quả:</strong> Kết quả thực tế đạt được sau khi hoàn thiện.</p>
+                    </div>
+                    <div class="leading-relaxed font-mono text-xs">
+                        <span class="text-brand-600 font-semibold">SOLIDWORKS, Python, PLC</span>
+                    </div>
+                </div>
+            `;
+            insertBeforeAddCard('projects-container', div, autoPick);
+        }
+
+        function addNewAwardCard(autoPick) {
+            const fname = `award_${Date.now().toString().slice(-4)}.jpg`;
+            const div = document.createElement('div');
+            div.className = 'removable-item relative bg-slate-50 rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden hover-card group';
+            div.innerHTML = `
+                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="${fname}" onclick="handleImageClick(this, 'Chứng nhận Giải thưởng')">
+                    <img src="assets/${fname}" alt="Giải thưởng" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=${fname}'">
+                </div>
+                <div class="p-6">
+                    <div class="inline-block px-3 py-1 bg-indigo-100 text-brand-700 text-xs font-bold rounded-full mb-3">Cấp Giải Thưởng (Thời gian)</div>
+                    <h4 class="font-bold text-brand-900 text-lg mb-2">Tên Giải Thưởng Mới (Bấm để sửa)</h4>
+                    <p class="text-slate-600 text-sm mb-3">Tên cuộc thi hoặc đơn vị tổ chức trao giải</p>
+                    <p class="text-xs text-slate-500 border-t border-slate-200/80 pt-3">Mô tả đề tài, vai trò và thành tích đạt được.</p>
+                </div>
+            `;
+            insertBeforeAddCard('awards-grid', div, autoPick);
+        }
+
+        function addNewTimelineItem() {
+            const div = document.createElement('div');
+            div.className = 'removable-item relative';
+            div.innerHTML = `
+                <div class="absolute w-4 h-4 bg-brand-600 border-4 border-white shadow rounded-full -left-[37px] top-1"></div>
+                <span class="text-xs font-mono text-brand-600 font-bold uppercase tracking-wider bg-indigo-50 px-2.5 py-1 rounded">Thời gian</span>
+                <h4 class="text-lg font-extrabold text-brand-900 mt-2">Tên Cột Mốc / Đơn Vị Mới</h4>
+                <p class="text-slate-700 text-sm mt-1 font-semibold">Vị trí / Chuyên ngành</p>
+                <p class="text-slate-500 text-xs mt-2 leading-relaxed">Mô tả ngắn gọn nội dung đào tạo hoặc công việc thực tế.</p>
+            `;
+            insertBeforeAddCard('timeline-list', div, false);
+        }
+
+        function addNewCertCard(autoPick) {
+            const fname = `cert_${Date.now().toString().slice(-4)}.jpg`;
+            const div = document.createElement('div');
+            div.className = 'removable-item relative bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm hover-card overflow-hidden group';
+            div.innerHTML = `
+                <div class="aspect-[4/3] bg-slate-200 relative overflow-hidden border-b border-slate-200 editable-img-wrapper cursor-zoom-in" data-filename="${fname}" onclick="handleImageClick(this, 'Văn bằng / Chứng chỉ')">
+                    <img src="assets/${fname}" alt="Chứng chỉ mới" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/e2e8f0/475569?text=${fname}'">
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-brand-900 text-sm leading-snug mb-1">Tên Chứng Chỉ Mới</h4>
+                    <p class="text-xs text-brand-600 font-semibold mb-1">Tổ chức cấp chứng chỉ</p>
+                    <p class="text-[11px] text-slate-500">Cấp ngày: ../../2026. Nội dung chứng nhận.</p>
+                </div>
+            `;
+            insertBeforeAddCard('certs-grid', div, autoPick);
+        }
+
+        function addNewSoftSkillCard(autoPick) {
+            const fname = `soft_${Date.now().toString().slice(-4)}.jpg`;
+            const div = document.createElement('div');
+            div.className = 'removable-item relative bg-slate-800/70 border border-slate-700/80 p-6 rounded-2xl';
+            div.innerHTML = `
+                <div class="editable-img-wrapper cursor-zoom-in relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-900 border border-slate-700 mb-4" data-filename="${fname}" onclick="handleImageClick(this, 'Ảnh minh chứng kỹ năng mềm')">
+                    <img src="assets/${fname}" alt="Minh chứng kỹ năng mềm" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/1e293b/94a3b8?text=${fname}'">
+                    <span class="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">Ảnh minh chứng</span>
+                </div>
+                <i class="fas fa-star text-2xl text-indigo-400 mb-3"></i>
+                <h4 class="font-bold text-white text-base mb-1">Tên Kỹ Năng Mềm Mới</h4>
+                <p class="text-slate-400 text-xs leading-relaxed">Mô tả ngắn gọn biểu hiện thực tế của kỹ năng này.</p>
+            `;
+            insertBeforeAddCard('soft-skills-grid', div, autoPick);
+        }
+
+        function addNewActivityRow(autoPick) {
+            const idSuffix = Date.now().toString().slice(-4);
+            const f1 = `act_${idSuffix}_1.jpg`;
+            const div = document.createElement('div');
+            div.className = 'act-item removable-item relative bg-slate-800/50 rounded-3xl p-6 border border-slate-700/80';
+            div.innerHTML = `
+                <div class="act-header-col mb-5">
+                    <span class="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold rounded-full mb-2">Nhãn Hoạt Động</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">Tên Hoạt Động / Trải Nghiệm Mới (Bấm để sửa)</h3>
+                    <p class="text-slate-400 text-xs sm:text-sm">Tóm tắt ngắn gọn về hoạt động, chuyến tham quan doanh nghiệp hoặc sự kiện ngoại khóa.</p>
+                </div>
+                <div class="act-media-col space-y-2">
+                    <div class="swiper rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide editable-img-wrapper" data-filename="${f1}"><img src="assets/${f1}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/1e293b/94a3b8?text=${f1}'"></div>
+                        </div>
+                        <div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="act-details-col mt-6 pt-5 border-t border-slate-700/80 space-y-4">
+                    <div>
+                        <p class="act-label"><i class="fas fa-flag mr-1.5"></i>Bối cảnh & Vai trò</p>
+                        <p class="act-text">Bấm vào đây để mô tả thời gian, địa điểm và vai trò của bạn trong hoạt động này.</p>
+                    </div>
+                    <div>
+                        <p class="act-label"><i class="fas fa-tasks mr-1.5"></i>Việc đã thực hiện</p>
+                        <p class="act-text">Bấm vào đây để liệt kê cụ thể những công việc, quy trình bạn đã quan sát hoặc trực tiếp tham gia.</p>
+                    </div>
+                    <div>
+                        <p class="act-label"><i class="fas fa-lightbulb mr-1.5"></i>Kỹ năng rèn luyện</p>
+                        <p class="act-text">Bấm vào đây để nêu những kỹ năng mềm hoặc kiến thức thực tế đúc kết được.</p>
+                    </div>
+                    <div>
+                        <p class="act-label"><i class="fas fa-handshake mr-1.5"></i>Giá trị mang lại cho doanh nghiệp</p>
+                        <p class="act-text">Bấm vào đây để nêu rõ trải nghiệm này giúp bạn đóng góp gì khi vào làm tại doanh nghiệp.</p>
+                    </div>
+                </div>
+            `;
+            insertBeforeAddCard('activities-list', div, autoPick);
+        }
+
+        // 9. Bắt sự kiện click đổi ảnh khi ở chế độ Edit
+        document.addEventListener('click', function(e) {
+            if (!isEditMode) return;
+            if (e.target.closest('.swiper-button-next') || e.target.closest('.swiper-button-prev') || e.target.closest('.swiper-pagination') || e.target.closest('.item-action-bar') || e.target.closest('.media-thumbs-strip') || e.target.closest('.section-add-card') || e.target.closest('.swiper-add-slide')) {
+                return;
+            }
+            const link = e.target.closest('a');
+            if (link && !e.target.closest('#editor-floating-ui')) {
+                e.preventDefault();
+            }
+            const wrapper = e.target.closest && e.target.closest('.editable-img-wrapper');
+            if (!wrapper) return;
+            e.preventDefault();
+            e.stopPropagation();
+            currentTargetWrapper = wrapper;
+            fileInput.click();
+        }, true);
+
+        fileInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file || !currentTargetWrapper) return;
+
+            const requiredFilename = currentTargetWrapper.getAttribute('data-filename');
+            await saveImageAndWriteToAssets(requiredFilename, file);
+            renderMediaThumbStrips();
+            await persistStateAndAutoWriteCode(`Đã cập nhật ảnh ${requiredFilename}!`);
+            fileInput.value = '';
+        });
+
+        // 10. Tự động lưu khi sửa chữ trên trang
+        let saveTimeout = null;
+        document.addEventListener('input', function(e) {
+            if (!isEditMode) return;
+            if (e.target.closest('#portfolio-main') || e.target.closest('footer')) {
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    persistStateAndAutoWriteCode();
+                }, 600);
+            }
+        });
+
+        // 11. Kết nối trực tiếp thư mục dự án trên máy tính (Auto-Save vào assets/ & index.html)
+        async function connectProjectFolder() {
+            if (!window.showDirectoryPicker) {
+                toast('Trình duyệt này không hỗ trợ nối thư mục trực tiếp. Hãy mở bằng Chrome hoặc Edge, hoặc dùng nút "Tải index.html"!');
+                return;
+            }
+            try {
+                projectDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                const badge = document.getElementById('folder-status-badge');
+                badge.textContent = 'Đã nối: ' + projectDirHandle.name;
+                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+
+                const assetsDir = await projectDirHandle.getDirectoryHandle('assets', { create: true });
+                const allSavedImages = await idbGetAll();
+                for (const [filename, blob] of Object.entries(allSavedImages)) {
+                    const fh = await assetsDir.getFileHandle(filename, { create: true });
+                    const writable = await fh.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                }
+
+                await saveFullHtmlToCode(true);
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    toast('Không thể kết nối thư mục: ' + err.message);
+                }
+            }
+        }
+
+        async function saveImageAndWriteToAssets(filename, fileBlob) {
+            await saveImage(filename, fileBlob);
+
+            if (projectDirHandle) {
+                try {
+                    const assetsDir = await projectDirHandle.getDirectoryHandle('assets', { create: true });
+                    const fileHandle = await assetsDir.getFileHandle(filename, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(fileBlob);
+                    await writable.close();
+                    toast(`Đã tự động lưu "${filename}" vào thư mục assets/!`);
+                    return;
+                } catch (err) {
+                    console.warn('Ghi trực tiếp vào assets/ thất bại, chuyển sang tải file:', err);
+                }
+            }
+
+            downloadBlob(fileBlob, filename);
+        }
+
+        // 12. Làm sạch DOM trước khi xuất ra mã nguồn index.html
+        function getCleanMainInnerHtml() {
+            const mainClone = document.getElementById('portfolio-main').cloneNode(true);
+
+            // Xoá toàn bộ các thanh công cụ chỉnh sửa và nút (+ Thêm) tạm thời
+            mainClone.querySelectorAll('.item-action-bar, .media-thumbs-strip, .section-add-card, .swiper-add-slide, .swiper-notification').forEach(el => el.remove());
+
+            mainClone.querySelectorAll('.swiper').forEach(sw => {
+                sw.querySelectorAll('.swiper-slide-duplicate').forEach(d => d.remove());
+                sw.classList.remove('swiper-initialized', 'swiper-horizontal', 'swiper-backface-hidden', 'swiper-pointer-events');
+                const wrap = sw.querySelector('.swiper-wrapper');
+                if (wrap) {
+                    wrap.removeAttribute('style');
+                    wrap.removeAttribute('id');
+                    wrap.removeAttribute('aria-live');
+                }
+                sw.querySelectorAll('.swiper-slide').forEach(sl => {
+                    sl.classList.remove('swiper-slide-active', 'swiper-slide-next', 'swiper-slide-prev', 'swiper-slide-visible', 'swiper-slide-fully-visible');
+                    sl.removeAttribute('style');
+                    sl.removeAttribute('role');
+                    sl.removeAttribute('aria-label');
+                    sl.removeAttribute('data-swiper-slide-index');
+                });
+                sw.querySelectorAll('.swiper-button-next, .swiper-button-prev').forEach(btn => {
+                    btn.removeAttribute('tabindex');
+                    btn.removeAttribute('role');
+                    btn.removeAttribute('aria-label');
+                    btn.removeAttribute('aria-controls');
+                    btn.removeAttribute('aria-disabled');
+                    btn.classList.remove('swiper-button-disabled', 'swiper-button-lock');
+                });
+                const pag = sw.querySelector('.swiper-pagination');
+                if (pag) {
+                    pag.innerHTML = '';
+                    pag.className = 'swiper-pagination';
+                }
+            });
+
+            mainClone.querySelectorAll('.editable-img-wrapper').forEach(w => {
+                const fname = w.getAttribute('data-filename');
+                const img = w.querySelector('img');
+                if (fname && img) {
+                    img.setAttribute('src', 'assets/' + fname);
+                }
+            });
+
+            mainClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            mainClone.querySelectorAll('.aos-init, .aos-animate').forEach(el => {
+                el.classList.remove('aos-init', 'aos-animate');
+            });
+
+            return mainClone.innerHTML;
+        }
+
+        function buildCompleteCleanHtmlDocument() {
+            const docClone = document.documentElement.cloneNode(true);
+            const bodyClone = docClone.querySelector('body');
+            bodyClone.classList.remove('edit-image-mode');
+            bodyClone.removeAttribute('data-aos-easing');
+            bodyClone.removeAttribute('data-aos-duration');
+            bodyClone.removeAttribute('data-aos-delay');
+
+            // Xoá các thẻ <style> tạm do Tailwind CDN sinh ra để file index.html luôn gọn sạch
+            docClone.querySelectorAll('head style:not(#custom-portfolio-style)').forEach(st => st.remove());
+
+            const mainInClone = docClone.querySelector('#portfolio-main');
+            if (mainInClone) {
+                mainInClone.innerHTML = getCleanMainInnerHtml();
+            }
+
+            // Đảm bảo ẩn cụm nút Admin khi đẩy lên GitHub
+            const floatingUI = docClone.querySelector('#editor-floating-ui');
+            if (floatingUI) {
+                floatingUI.classList.add('hidden');
+                floatingUI.classList.remove('flex');
+            }
+            const banner = docClone.querySelector('#edit-mode-Banner');
+            if (banner) banner.classList.add('hidden');
+            const toggleText = docClone.querySelector('#toggle-edit-text');
+            if (toggleText) toggleText.textContent = 'Bật Chế Độ Chỉnh Sửa';
+            const toggleBtn = docClone.querySelector('#toggle-edit-btn');
+            if (toggleBtn) {
+                toggleBtn.classList.remove('bg-brand-600', 'text-white', 'border-brand-600');
+                toggleBtn.classList.add('bg-white', 'text-slate-800');
+            }
+            const toastEl = docClone.querySelector('#toast');
+            if (toastEl) toastEl.classList.add('hidden');
+
+            docClone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+            return '<!DOCTYPE html>\n' + docClone.outerHTML;
+        }
+
+        async function persistStateAndAutoWriteCode(customToastMsg) {
+            try {
+                localStorage.setItem(LS_MAIN_HTML, getCleanMainInnerHtml());
+            } catch (err) {}
+
+            if (projectDirHandle) {
+                await saveFullHtmlToCode(false);
+                if (customToastMsg) toast(customToastMsg + ' (Đã tự ghi vào index.html)');
+            } else if (customToastMsg) {
+                toast(customToastMsg);
+            }
+        }
+
+        async function saveFullHtmlToCode(showPromptIfNoFolder) {
+            const fullHtml = buildCompleteCleanHtmlDocument();
+            try {
+                localStorage.setItem(LS_MAIN_HTML, getCleanMainInnerHtml());
+            } catch (e) {}
+
+            if (projectDirHandle) {
+                try {
+                    const fileHandle = await projectDirHandle.getFileHandle('index.html', { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(fullHtml);
+                    await writable.close();
+                    if (showPromptIfNoFolder) toast('Đã ghi toàn bộ chữ, ảnh & giao diện mới thẳng vào file index.html!');
+                    return;
+                } catch (err) {
+                    console.warn('Không ghi được qua projectDirHandle:', err);
+                }
+            }
+
+            if (showPromptIfNoFolder) {
+                if (window.showSaveFilePicker) {
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: 'index.html',
+                            types: [{ description: 'HTML File', accept: { 'text/html': ['.html'] } }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(fullHtml);
+                        await writable.close();
+                        toast('Đã lưu đè thành công vào file index.html!');
+                        return;
+                    } catch (err) {
+                        if (err.name === 'AbortError') return;
+                    }
+                }
+                downloadUpdatedHtmlFile();
+            }
+        }
+
+        function downloadUpdatedHtmlFile() {
+            const fullHtml = buildCompleteCleanHtmlDocument();
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            downloadBlob(blob, 'index.html');
+            toast('Đã tải về file index.html mới nhất!');
+        }
+
+        // ---- IndexedDB: lưu file ảnh ----
+        function openDB() {
+            if (!dbPromise) {
+                dbPromise = new Promise((resolve, reject) => {
+                    if (!window.indexedDB) return reject(new Error('IndexedDB không khả dụng'));
+                    const req = indexedDB.open(DB_NAME, 1);
+                    req.onupgradeneeded = () => req.result.createObjectStore(DB_STORE);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+            }
+            return dbPromise;
+        }
+        async function idbPut(key, blob) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(DB_STORE, 'readwrite');
+                tx.objectStore(DB_STORE).put(blob, key);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+        async function idbClear() {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(DB_STORE, 'readwrite');
+                tx.objectStore(DB_STORE).clear();
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+        async function idbGetAll() {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const out = {};
+                const req = db.transaction(DB_STORE, 'readonly').objectStore(DB_STORE).openCursor();
+                req.onsuccess = e => {
+                    const cursor = e.target.result;
+                    if (cursor) { out[cursor.key] = cursor.value; cursor.continue(); }
+                    else resolve(out);
+                };
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.remove('hidden');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => t.classList.add('hidden'), 4200);
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }
+
+        function applyImage(key) {
+            document.querySelectorAll('.editable-img-wrapper').forEach(w => {
+                if (w.getAttribute('data-filename') === key) {
+                    const img = w.querySelector('img');
+                    if (img && blobUrls[key]) img.src = blobUrls[key];
+                }
+            });
+        }
+
+        async function saveImage(key, blob) {
+            try { await idbPut(key, blob); } catch (err) {}
+            if (blobUrls[key]) URL.revokeObjectURL(blobUrls[key]);
+            blobUrls[key] = URL.createObjectURL(blob);
+            applyImage(key);
+        }
+
+        async function restoreImages() {
+            try {
+                const all = await idbGetAll();
+                Object.keys(all).forEach(key => {
+                    blobUrls[key] = URL.createObjectURL(all[key]);
+                    applyImage(key);
+                });
+            } catch (err) {}
+        }
+
+        async function resetPortfolioData() {
+            if (!confirm('Khôi phục toàn bộ giao diện và chữ về mặc định ban đầu?')) return;
+            try { localStorage.removeItem(LS_MAIN_HTML); } catch (err) {}
+            try { await idbClear(); } catch (err) {}
+            location.reload();
+        }
+
+        // Bộ lọc Dự án (Filter Tabs)
+        function filterProjects(category) {
+            document.querySelectorAll('.proj-filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.className = 'proj-filter-btn active px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-brand-600 text-white shadow-md transition-all';
+                } else {
+                    btn.className = 'proj-filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:border-brand-500 transition-all';
+                }
+            });
+
+            document.querySelectorAll('.project-card').forEach(card => {
+                const cats = card.getAttribute('data-category') || '';
+                if (category === 'all' || cats.includes(category)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            AOS.refresh();
+        }
+
+        // Lightbox Phóng to ảnh
+        function handleImageClick(wrapper, captionText) {
+            if (isEditMode) return;
+            const img = wrapper.querySelector('img');
+            if (!img) return;
+            const modal = document.getElementById('lightbox-modal');
+            const modalImg = document.getElementById('lightbox-img');
+            const modalCaption = document.getElementById('lightbox-caption');
+
+            modalImg.src = img.src;
+            modalCaption.textContent = captionText || '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const adminUI = document.getElementById('editor-floating-ui');
+
+            // Chỉ khi link có ?admin=nhat mới hiện bảng điều khiển VÀ tự bật luôn chế độ chỉnh sửa
+            if (urlParams.get('admin') === 'nhat') {
+                adminUI.classList.remove('hidden');
+                adminUI.classList.add('flex');
+                if (!isEditMode) toggleImageEditMode();
+            }
+
+
+            try {
+                const savedMainHtml = localStorage.getItem(LS_MAIN_HTML);
+                if (savedMainHtml && savedMainHtml.trim().length > 100) {
+                    document.getElementById('portfolio-main').innerHTML = savedMainHtml;
+                }
+            } catch (err) {}
+
+            await restoreImages();
+            initAllSwipers();
+            decorateEditableControls();
+            AOS.init({ once: true, offset: 60, duration: 700 });
+        });
+
+        // ScrollSpy: Tự động sáng đèn Menu khi cuộn trang
+        window.addEventListener('scroll', () => {
+            let currentSection = '';
+            document.querySelectorAll('.section-spy').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 180)) { 
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-brand-600', 'font-bold', 'border-brand-600');
+                link.classList.add('text-slate-500', 'border-transparent');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.remove('text-slate-500', 'border-transparent');
+                    link.classList.add('text-brand-600', 'font-bold', 'border-brand-600');
+                }
+            });
+        });
+    </script>
+
+</body></html>
